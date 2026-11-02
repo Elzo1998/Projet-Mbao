@@ -5,11 +5,11 @@
    "id": "C-001",
    "date": "2026-11-02",
    "texte": "R+1 : fusionner les deux chambres miroirs de façade en UNE suite parentale (chambre spacieuse, grande salle de bain, walk-in dressing avec îlot central, circulations confortables), avec le MOINS de modifications possible (poteaux-poutres inchangés, cloisons décloisonnables). Proposition 2D libre, règles de l'atelier appliquées.",
-   "statut": "fait",
-   "preuve": "proposition A : projet/esquisse/suite_parentale_r1.py, 16 contrôles de dégagement à 0 écart ; non encore vérifiée par le client ni par l'agent vérificateur",
+   "statut": "en_cours",
+   "preuve": "proposition A corrigée par C-003 : 3 variantes B en attente de choix",
    "source": "msg 02/11 (MBAO)",
    "moment": "APERCU",
-   "maj": "2026-11-02 20:54"
+   "maj": "2026-11-02 21:12"
   },
   {
    "id": "C-002",
@@ -20,6 +20,16 @@
    "source": "msg 02/11",
    "moment": "BRIEF",
    "maj": "2026-11-02 20:54"
+  },
+  {
+   "id": "C-003",
+   "date": "2026-11-02",
+   "texte": "Retours sur la proposition A : (1) porte NO s'ouvre contre le mur (charnière côté ouest) ; (2) supprimer l'ancien dressing (placard + petits murs) ; (3) walk-in : on entre par le dressing puis on passe à la salle de bain, UNE seule porte depuis la chambre, plus de porte directe SDB ; (4) aération et lumière NATURELLES toujours, ventilation mécanique seulement faute d'autre option : dressing avec fenêtre, SDB sans porte-fenêtre sur le balcon (baie à modifier : porte vitrée 1 vantail 0.80-0.90 ou fenêtre ~1.00 avec meuble bas) ; (5) îlot >= 1.00 de large, idéal 1.20 ; (6) SDB confortable sans baignoire : douche, WC suspendu, meuble vasque suspendu ; (7) TROIS propositions en IMAGES (PNG) jusqu'à validation, PDF après ; (8) ignorer pour l'instant cartouche et éléments graphiques.",
+   "statut": "fait",
+   "preuve": "3 propositions PNG projet/esquisse/apercus/ ; 19-20 contrôles chiffrés à 0 écart ; en attente du choix du client",
+   "source": "msg 02/11 (MBAO, annotations)",
+   "moment": "APERCU",
+   "maj": "2026-11-02 21:12"
   }
  ]
 }
