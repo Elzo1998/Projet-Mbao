@@ -25,11 +25,21 @@
    "id": "C-003",
    "date": "2026-11-02",
    "texte": "Retours sur la proposition A : (1) porte NO s'ouvre contre le mur (charnière côté ouest) ; (2) supprimer l'ancien dressing (placard + petits murs) ; (3) walk-in : on entre par le dressing puis on passe à la salle de bain, UNE seule porte depuis la chambre, plus de porte directe SDB ; (4) aération et lumière NATURELLES toujours, ventilation mécanique seulement faute d'autre option : dressing avec fenêtre, SDB sans porte-fenêtre sur le balcon (baie à modifier : porte vitrée 1 vantail 0.80-0.90 ou fenêtre ~1.00 avec meuble bas) ; (5) îlot >= 1.00 de large, idéal 1.20 ; (6) SDB confortable sans baignoire : douche, WC suspendu, meuble vasque suspendu ; (7) TROIS propositions en IMAGES (PNG) jusqu'à validation, PDF après ; (8) ignorer pour l'instant cartouche et éléments graphiques.",
-   "statut": "fait",
-   "preuve": "3 propositions PNG projet/esquisse/apercus/ ; 19-20 contrôles chiffrés à 0 écart ; en attente du choix du client",
+   "statut": "verifie",
+   "preuve": "propositions P1-P3 envoyées (commit f6487db), P3 retenue par le client",
    "source": "msg 02/11 (MBAO, annotations)",
    "moment": "APERCU",
-   "maj": "2026-11-02 21:12"
+   "maj": "2026-11-02 21:32"
+  },
+  {
+   "id": "C-004",
+   "date": "2026-11-02",
+   "texte": "Choix P3, version C : (1) lit glissé contre le côté façade, fauteuil de l'autre côté (nord), meuble TV axé sur le lit ; (2) porte du dressing = porte COULISSANTE vers le mur de la porte d'entrée (nord), en partie cachée derrière la penderie ; (3) SDB : garder le mur (ancien WC est), l'agrandir vers le nord de 0.50-0.60 ; porte latérale conservée, ouverture vers l'intérieur comme l'ancienne version ; (4) supprimer l'îlot (impossible >= 1.00 avec circulation fluide) et faire une penderie en U sur les murs + une partie du mur de la SDB ; (5) fenêtre 1.40 x 1.00, allège 1.10, meuble bas de rangement dessous. Toujours en image (PNG) jusqu'à validation.",
+   "statut": "fait",
+   "preuve": "image projet/esquisse/apercus/MBAO_R1_P3C.png, 19 contrôles chiffrés à 0 écart ; en attente de la validation du client",
+   "source": "msg 02/11 (MBAO, choix P3)",
+   "moment": "APERCU",
+   "maj": "2026-11-02 21:32"
   }
  ]
 }
