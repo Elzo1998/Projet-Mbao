@@ -63,6 +63,8 @@ def controles():
     t('CIR-020', 'Douche : approche libre 0.70 x 0.70', libre(box(6.57, 0.0, 7.27, 0.70), [R(WC), R(VASQUE), pp]), 0.0)
     t('PORTE', 'Porte SDB : vantail ouvert adossé au mur nord (jeu <= 0.05)', 0.05 - (SDB_Y - 2.35), 0.0)
     t('NAT', 'Lumière et air naturels : fenêtre du dressing 1.60 (>= 0.90)', 1.60, 0.90)
+    t('FEN-001', 'Fenêtre du dressing : tête à 2.20 = linteau commun (allège 1.10 + hauteur 1.10)', 1.10 + 1.10, 2.20)
+    t('MET-021', 'Murs neufs >= 0.15 (rebouchage de l\'ancienne porte, mur au-dessus de la porte, mur nord SDB)', 0.15, 0.15)
     t('NAT', 'Lumière et air naturels : fenêtre de la salle de bain existante 1.00', 1.00, 0.60)
     return L
 
@@ -74,11 +76,11 @@ def dessiner():
     ax.add_patch(Rectangle((1.38, -1.40), 5.57, 1.25, fc='#f2f2f2', ec=NOIR, lw=0.6, zorder=1)); ax.text(4.1, -0.78, 'BALCON (inchangé)', ha='center', fontsize=7, color='#555')
     ax.add_patch(Rectangle((B.PORTE_NO[0], D), B.PORTE_NO[1] - B.PORTE_NO[0], 0.15, fc='white', ec='none', zorder=4))
     ax.add_patch(Rectangle((B.PORTE_NE[0], D), B.PORTE_NE[1] - B.PORTE_NE[0], 0.15, fc='#f4c0c0', ec=ROUGE, lw=0.8, zorder=4))
-    # façade : baie ouest et fenêtre de la SDB inchangées ; baie est réduite à une fenêtre 1.60 x 1.00 (allège 1.10)
-    for a, b in ((B.BAIES[0][0], B.BAIES[0][1]), (7.07, 8.07)):
+    # façade : baie ouest et fenêtre de la SDB inchangées ; baie est réduite à une fenêtre 1.60 x 1.10 (allège 1.10, tête 2.20 = linteau commun, FEN-001) ; fenêtre du WC ouest conservée
+    for a, b in ((B.BAIES[0][0], B.BAIES[0][1]), (0.20, 1.20), (7.07, 8.07)):
         ax.add_patch(Rectangle((a, -0.15), b - a, 0.15, fc='white', ec='none', zorder=4)); ax.plot([a, b], [-0.075, -0.075], color=BLEU, lw=1.6, zorder=5)
     ax.add_patch(Rectangle((4.245, -0.15), 1.62, 0.15, fc=GRIS, ec='none', zorder=4.5)); ax.add_patch(Rectangle((4.25, -0.15), 1.60, 0.15, fc='white', ec='none', zorder=4.6))
-    ax.plot([4.25, 5.85], [-0.075, -0.075], color=ROUGE, lw=2.2, zorder=5); ax.text(5.05, -0.30, 'Fenêtre 1.60 x 1.00, allège 1.10 (même largeur que la baie)', ha='center', fontsize=6.3, color=ROUGE)
+    ax.plot([4.25, 5.85], [-0.075, -0.075], color=ROUGE, lw=2.2, zorder=5); ax.text(5.05, -0.30, 'Fenêtre 1.60 x 1.10, allège 1.10, tête 2.20 (même largeur que la baie)', ha='center', fontsize=6.3, color=ROUGE)
     # cloison centrale conservée, un seul percement : porte coulissante du dressing
     rect(ax, (4.06, 0, 0.15, SLIDE[0]), GRIS, NOIR, 1.0, z=3); rect(ax, (4.06, SLIDE[1], 0.15, D - SLIDE[1]), GRIS, NOIR, 1.0, z=3)
     rect(ax, (4.26, SLIDE[1], 0.04, 0.85), '#dddddd', NOIR, 0.8, z=5, ls=(0, (3, 2)))                    # vantail ouvert, rangé vers le nord
@@ -87,9 +89,9 @@ def dessiner():
     # démolitions : WC ouest (2 murs) et mur nord du WC est ; le mur ouest du WC est est CONSERVÉ
     for c in (B.CLOIS_EXISTANT[0], B.CLOIS_EXISTANT[1], B.CLOIS_EXISTANT[2]): rect(ax, c, '#f8e0e0', ROUGE, 0.8, hatch='////', z=3, ls=(0, (3, 2)))
     rect(ax, (5.95, 0, 0.14, 0.98), GRIS, NOIR, 1.0, z=3)                                                                  # mur conservé
-    rect(ax, (5.95, 0.98, 0.14, 0.57), '#cfe0ff', BLEU, 1.0, z=3)                                                          # ancienne porte (0.98-1.84) rebouchée jusqu'à 1.55
+    rect(ax, (5.95, 0.98, 0.15, 0.57), '#cfe0ff', BLEU, 1.0, z=3)                                                          # ancienne porte (0.98-1.84) rebouchée jusqu'à 1.55
     rect(ax, (5.95, 1.84, 0.14, 0.14), '#f8e0e0', ROUGE, 0.8, hatch='////', z=3, ls=(0, (3, 2)))                           # petit retour démoli : nouvelle porte 1.55-2.35
-    rect(ax, (5.95, 2.35, 0.14, Y_TOP - 2.35), '#cfe0ff', BLEU, 1.0, z=3)                                                  # mur neuf au-dessus de la porte
+    rect(ax, (5.95, 2.35, 0.15, Y_TOP - 2.35), '#cfe0ff', BLEU, 1.0, z=3)                                                  # mur neuf au-dessus de la porte
     rect(ax, (5.95, SDB_Y, W - 5.95, 0.15), '#cfe0ff', BLEU, 1.0, z=3)                                                     # nouveau mur nord de la SDB
     for m in MEUBLES: meuble(ax, m, fs=5.0)
     porte(ax, *PORTE_SDB); porte(ax, *PORTE_NO)
@@ -101,7 +103,7 @@ def dessiner():
     L = controles(); nko = sum(1 for l in L if not l[4])
     ax.text(-0.5, D + 1.40, 'MBAO - R+1 - suite parentale - PROPOSITION 3, VERSION D', fontsize=10.5, fontweight='bold', va='top')
     ax.text(-0.5, D + 1.08, 'Lit côté façade, TV axé sur le lit, fauteuil au nord ; porte du dressing coulissante ; SDB agrandie de 0.55 vers le nord, porte adossée au nouveau mur ;\n'
-            'penderie en U sans îlot (allée centrale 1.92) ; fenêtre 1.60 sur meuble de rangement mur à mur ; façade modifiée seulement à l\'ouverture rouge.', fontsize=6.6, va='top', color='#333')
+            'penderie en U sans îlot (allée centrale 1.92) ; fenêtre 1.60 x 1.10 sur meuble de rangement mur à mur ; façade modifiée seulement à l\'ouverture rouge.', fontsize=6.6, va='top', color='#333')
     ax.text(-0.5, -1.62, 'Contrôles chiffrés : %d, écarts : %d. Rouge hachuré = démolition, bleu = neuf, rouge plein = fermeture. Cotes en mètres.' % (len(L), nko), fontsize=6.6, va='bottom')
     out = os.path.join(HERE, 'apercus'); os.makedirs(out, exist_ok=True)
     fig.savefig(os.path.join(out, 'MBAO_R1_P3D.png'), dpi=130, bbox_inches='tight'); plt.close(fig)
