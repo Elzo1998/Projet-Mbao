@@ -1,0 +1,32 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 /home/user/atelier-archi-ingenierie/outils/gpu_runpod/rendu_gpu.py:*)"
+    ]
+  },
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 /home/user/atelier-archi-ingenierie/outils/consignes.py rappel 2>/dev/null || true",
+            "timeout": 20
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "SendUserFile",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 -I /home/user/atelier-archi-ingenierie/outils/crochet_envoi_metre.py",
+            "timeout": 60
+          }
+        ]
+      }
+    ]
+  }
+}
