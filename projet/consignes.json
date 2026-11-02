@@ -6,10 +6,10 @@
    "date": "2026-11-02",
    "texte": "R+1 : fusionner les deux chambres miroirs de façade en UNE suite parentale (chambre spacieuse, grande salle de bain, walk-in dressing avec îlot central, circulations confortables), avec le MOINS de modifications possible (poteaux-poutres inchangés, cloisons décloisonnables). Proposition 2D libre, règles de l'atelier appliquées.",
    "statut": "en_cours",
-   "preuve": "proposition A corrigée par C-003 : 3 variantes B en attente de choix",
+   "preuve": "PDF livre, validation client attendue",
    "source": "msg 02/11 (MBAO)",
    "moment": "APERCU",
-   "maj": "2026-11-02 21:12"
+   "maj": "2026-11-02 22:00"
   },
   {
    "id": "C-002",
@@ -45,20 +45,21 @@
    "id": "C-005",
    "date": "2026-11-02",
    "texte": "Version C, retouches : (1) porte de la SDB adossée au NOUVEAU mur nord, ouverture dans l'autre sens (charnière côté nord, vantail ouvert à plat contre le mur nord) ; (2) équipements de la SDB placés selon les règles de l'art (positions réelles des attentes à relever sur site) ; (3) meuble de rangement et fenêtre 1.60 de large, sur toute l'envergure entre le mur de la SDB et la cloison de la chambre ; (4) pas d'îlot : confirmé par le client. Accord d'ensemble sur la version C.",
-   "statut": "fait",
-   "preuve": "image projet/esquisse/apercus/MBAO_R1_P3D.png, 20 contrôles chiffrés à 0 écart ; en attente de la validation avant le PDF",
+   "statut": "verifie",
+   "preuve": "PDF 3 versions, 2 passages du verificateur, 1 bloquant corrige (FEN-001), commit suivant",
    "source": "msg 02/11 (MBAO, retouches C)",
    "moment": "APERCU",
-   "maj": "2026-11-02 21:41"
+   "maj": "2026-11-02 22:00"
   },
   {
    "id": "C-006",
    "date": "2026-11-02",
    "texte": "Après accord d'ensemble sur la version D : (1) faire vérifier par l'agent vérificateur ; (2) produire UN PDF de trois versions : démolitions, constructions, projet final ; (3) reprendre la charte graphique du plan R+1 d'origine (PDF V2 page 15) et reproduire TOUT le niveau R+1 avec un cadre ORANGE sur la zone des deux chambres, modifications affichées dans cette zone pour que n'importe qui comprenne où est la modification.",
-   "statut": "a_faire",
-   "preuve": "",
+   "statut": "fait",
+   "preuve": "projet/esquisse/MBAO_R1_Suite_parentale_D.pdf, 2 passages verificateur : LIVRABLE sans bloquant ; attente validation client",
    "source": "msg 02/11 (MBAO, PDF)",
-   "moment": "APERCU"
+   "moment": "APERCU",
+   "maj": "2026-11-02 22:00"
   }
  ]
 }

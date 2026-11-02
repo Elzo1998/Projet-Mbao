@@ -162,7 +162,7 @@ def fenetre_est(p, final):
     p.rect(R(4.245, -0.15, 1.62, 0.15), (1, 1, 1), NOIR, 0.48)
     for yy in (-0.05, -0.10): p.line(P(4.245, yy), P(5.865, yy), NOIR, 0.48)
     p.line(P(5.05, -0.05), P(5.05, -0.10), NOIR, 0.48)
-    if not final: p.txt(X(4.30), Y(-0.15) + 10.5, 'fenêtre 1.60 x 1.10, allège 1.10', 6.4, 'helv', ROUGE if final is None else BLEU)
+    if not final: p.txt(X(4.28), Y(0.60), 'fenêtre 1.60 x 1.10, allège 1.10', 6.0, 'helv', BLEU)
 
 
 # ---------------------------------------------------------------------------------------------------- version 1 : démolitions
@@ -173,12 +173,12 @@ def v_demolitions(doc, src):
     p.mur((4.06, SLIDE[0], 0.15, SLIDE[1] - SLIDE[0]), 'demol')                                               # percement de la cloison centrale
     p.mur(B.STUB_O, 'demol'); p.mur(B.STUB_E, 'demol')                                                        # petits murs de l'ancien dressing
     for r in (R(*B.PLACARD_O), R(*B.PLACARD_E)): p.rect(r, None, ROUGE, 1.0, '[3 2] 0')                      # placards coulissants
-    p.txt(X(1.5), Y(5.30), 'placard à déposer', 6.8, 'helv', ROUGE); p.txt(X(4.55), Y(5.30), 'placard à déposer', 6.8, 'helv', ROUGE)
+    p.txt(X(1.75), Y(5.30), 'placard à déposer', 6.8, 'helv', ROUGE); p.txt(X(4.95), Y(5.30), 'placard à déposer', 6.8, 'helv', ROUGE)
     for r in ((0.0, 0.6, 0.6, 0.85), (1.50, 0.0, 0.70, 0.55), (7.65, 0.6, 0.62, 0.85), (6.1, 0.0, 0.70, 0.55)): p.rect(R(*r), None, ROUGE, 1.0, '[3 2] 0')   # sanitaires
-    p.txt(X(0.05), Y(1.65), 'appareils sanitaires', 6.2, 'helv', ROUGE); p.txt(X(0.05), Y(1.65) + 7, 'à déposer', 6.2, 'helv', ROUGE)
+    p.txt(X(0.10), Y(2.35), 'appareils sanitaires', 6.2, 'helv', ROUGE); p.txt(X(0.10), Y(2.35) + 7, 'à déposer', 6.2, 'helv', ROUGE)
     for r in ((2.18, 0.98, 0.14, 0.86), (5.95, 0.98, 0.14, 0.86), B.PORTE_NE[0] and (7.22, 5.65, 0.90, 0.15), (4.245, -0.15, 1.62, 0.15)): p.rect(R(*r), None, ROUGE, 1.1, '[3 2] 0')   # portes des WC, porte NE, baie est
-    p.txt(X(7.05), Y(5.50), 'porte NE à déposer', 6.2, 'helv', ROUGE)
-    p.txt(X(4.20), Y(-0.15) + 10.5, 'baie est à déposer', 6.4, 'helv', ROUGE)
+    p.txt(X(7.12), Y(5.42), 'porte NE à déposer', 6.2, 'helv', ROUGE)
+    p.txt(X(4.32), Y(0.45), 'baie est à déposer', 6.4, 'helv', ROUGE)
     bande(p, 14, 600, 'LÉGENDE', ['Cadre orange : zone des modifications (deux chambres miroirs du R+1).', 'Hachures rouges : cloison ou mur à démolir.', 'Pointillé rouge : élément à déposer (placard, sanitaire, porte, baie).', 'Gris : existant conservé.', 'Les poteaux, les poutres et les dalles ne sont pas touchés.'], 100)
     bande(p, 722, 600, 'DÉMOLITIONS', ['1. Cloison nord du WC ouest, 2.32 m.', '2. Cloison est du WC ouest, 1.98 m.', '3. Cloison nord du WC est, 2.32 m ; petit retour du mur ouest, 0.14 m.', '4. Percement de la cloison centrale (non porteuse, sous la poutre B14) : 0.80 m, linteau à prévoir.', '5. Deux petits murs de l\'ancien dressing : 0.62 m chacun.', '6. Placards coulissants des deux chambres.', '7. Appareils sanitaires, deux portes de WC, porte NE, baie est de façade.'], 100)
     return p
@@ -193,9 +193,9 @@ def v_constructions(doc, src):
     p.rect(R(7.22, D, 0.90, 0.15), BLEU_C, BLEU, 1.1); p.hachures(R(7.22, D, 0.90, 0.15), BLEU, 3.6, 0.35)     # fermeture de la porte NE
     p.txt(X(7.05), Y(5.50), 'fermeture porte NE', 6.2, 'helv', BLEU)
     # menuiseries et appareils neufs (bleu)
-    p.arc(*V.PORTE_SDB[:4], V.PORTE_SDB[4], BLEU)
+    p.arc(*V.PORTE_SDB[:4], V.PORTE_SDB[4], BLEU); p.arc(*V.PORTE_NO[:4], V.PORTE_NO[4], (0.35,) * 3)
     p.rect(R(4.26, SLIDE[1], 0.04, 0.85), None, BLEU, 0.8, '[3 2] 0'); p.line(P(4.45, SLIDE[0] + 0.30), P(4.45, SLIDE[1] + 0.55), BLEU, 0.9)
-    p.txt(X(4.50), Y(4.00), 'porte coulissante', 6.2, 'helv', BLEU, rot=90)
+    p.txt(X(4.64), Y(4.00), 'porte coulissante', 6.2, 'helv', BLEU, rot=90)
     for m in (V.U_N, V.U_E, V.U_S, V.BAS):
         p.rect(R(*m[1:]), None, BLEU, 1.0); p.line(P(m[1] + m[3] / 2 if m[3] < m[4] else m[1] + 0.05, m[2] + m[4] / 2 if m[3] < m[4] else m[2] + m[4] / 2), P(m[1] + m[3] / 2 if m[3] < m[4] else m[1] + m[3] - 0.05, m[2] + m[4] / 2), BLEU, 0.5, '[2 2] 0') if m[3] >= m[4] else p.line(P(m[1] + m[3] / 2, m[2] + 0.05), P(m[1] + m[3] / 2, m[2] + m[4] - 0.05), BLEU, 0.5, '[2 2] 0')
     p.txt(X(4.95), Y(0.22), 'meuble bas', 6.2, 'helv', BLEU); p.txt(X(5.35), Y(5.35), 'penderie en U', 6.2, 'helv', BLEU)
@@ -204,7 +204,7 @@ def v_constructions(doc, src):
     p.etiquette(7.2, 1.30 + 0.1, 'SDB', (W - 6.09) * SDB_Y); p.etiquette(5.7, 4.15, 'DRESSING', 4.06 * (D - Y_TOP) + 1.74 * Y_TOP)
     cadre(p, None)
     bande(p, 14, 600, 'LÉGENDE', ['Cadre orange : zone des modifications (deux chambres miroirs du R+1).', 'Bleu hachuré : mur ou cloison à construire (épaisseur 0.15).', 'Contour bleu : menuiserie, appareil ou agencement neuf.', 'Gris : existant conservé.', 'Mobilier non figuré (voir le projet final).'], 100)
-    bande(p, 722, 600, 'CONSTRUCTIONS', ['1. Cloison nord de la salle de bain, 2.32 m, à 2.38 de la façade ; mur ouest prolongé de 1.22 m (porte déplacée à 1.55-2.35).', '2. Fermeture de la porte NE (0.90 x 2.20) en maçonnerie.', '3. Porte coulissante 0.80 dans la cloison centrale, vantail rangé vers le nord derrière la penderie.', '4. Fenêtre 1.60 x 1.10, allège 1.10 (tête 2.20, linteau de la baie conservé), dans l\'ouverture de la baie est ; meuble bas 1.74 x 0.50 mur à mur.', '5. Penderie en U (nord, est, mur de la salle de bain), sans îlot.', '6. Salle de bain : douche 1.00 x 1.00 avec paroi vitrée côté WC, WC suspendu, meuble vasque suspendu 0.70 ; porte 0.80, vantail ouvert contre le mur nord.', 'POINTS DE L\'INGÉNIEUR : (a) cloison nord de la salle de bain parallèle aux nervures 12+8 du plancher, à 0.55 de l\'ancienne : poutrelle doublée ou calcul de charge ; (b) linteau neuf de la porte 1.55-2.35 avec appuis de 0.20 ; (c) attentes de plomberie à relever sur site (WC déplacé) ; (d) étanchéité sous faïence toute hauteur côté vasque.'], 100)
+    bande(p, 722, 600, 'CONSTRUCTIONS', ['1. Cloison nord de la salle de bain, 2.32 m, à 2.38 de la façade ; mur ouest prolongé de 1.22 m (porte déplacée à 1.55-2.35).', '2. Fermeture de la porte NE (0.90 x 2.20) en maçonnerie.', '3. Porte coulissante 0.80 dans la cloison centrale, vantail rangé vers le nord derrière la penderie.', '4. Fenêtre 1.60 x 1.10, allège 1.10, dans l\'ouverture de la baie est (1.62) ; hauteur portée de 1.00 à 1.10 pour garder la tête à 2.20 comme le linteau commun (FEN-001) ; meuble bas 1.74 x 0.50 mur à mur.', '5. Penderie en U (nord, est, mur de la salle de bain), sans îlot.', '6. Salle de bain : douche 1.00 x 1.00 avec paroi vitrée côté WC, WC suspendu, meuble vasque suspendu 0.70 ; porte 0.80, vantail ouvert contre le mur nord.', 'POINTS DE L\'INGÉNIEUR : (a) cloison nord de la salle de bain parallèle aux nervures 12+8 du plancher, à 0.55 de l\'ancienne : poutrelle doublée ou calcul de charge ; (b) linteau neuf de la porte 1.55-2.35 avec appuis de 0.20 ; (c) attentes de plomberie à relever sur site (WC déplacé) ; (d) étanchéité sous faïence toute hauteur côté vasque.'], 100)
     return p
 
 
@@ -240,10 +240,9 @@ def v_final(doc, src):
     for m, k in ((V.LIT, 'lit'), (V.CHEV_S, 'rect'), (V.CHEV_N, 'rect'), (V.FAUT, 'faut'), (V.TV, 'tv'), (V.U_N, 'pend'), (V.U_E, 'pend'), (V.U_S, 'pend'), (V.BAS, 'rect'), (V.DOUCHE, 'douche'), (V.WC, 'wc'), (V.VASQUE, 'vasque')): meuble(p, m, k)
     p.txt(X(4.95) - 18, Y(0.22), 'rangements', 6.2, 'helv', (0.35,) * 3); p.txt(X(5.35) - 8, Y(5.35), 'penderie', 6.2, 'helv', (0.35,) * 3)
     p.etiquette(2.55, 3.75, 'CHAMBRE', 4.06 * D); p.etiquette(6.45, 4.15, 'DRESSING', 4.06 * (D - Y_TOP) + 1.74 * Y_TOP); p.etiquette(7.0, 1.15, 'SDB', (W - 6.09) * SDB_Y)
-    p.cote((6.09, 0.0), (W, 0.0), '2.18', -16, size=8.5)
     cadre(p, None)
-    bande(p, 14, 600, 'LÉGENDE', ['Cadre orange : zone des modifications (deux chambres miroirs du R+1 transformées en une suite parentale).', 'Parcours : chambre, dressing, salle de bain ; une seule porte depuis la chambre.', 'Lumière et air naturels : fenêtre 1.60 x 1.10 pour le dressing, fenêtre 1.00 pour la salle de bain (châssis fixe dépoli ou soufflet haut au-dessus de la douche).'], 100)
-    bande(p, 722, 600, 'SURFACES NETTES (m²)', ['Avant : 2 chambres de 18.18 et 2 toilettes de 3.97.', 'Après : chambre 22.94 ; dressing 17.07 (penderie en U, allée centrale 1.92) ; salle de bain 5.19.', 'Pas d\'îlot : un îlot de 1.00 de large ne laisse pas 0.90 de passage de chaque côté.', 'Salle de bain : douche 1.00 x 1.00 avec paroi vitrée côté WC, WC et meuble vasque suspendus, pas de baignoire.', 'Cotes en mètres. Plan sous réserve du relevé des attentes sur site et du visa de l\'ingénieur de structure.'], 100)
+    bande(p, 14, 600, 'LÉGENDE', ['Cadre orange : zone des modifications (deux chambres miroirs du R+1 transformées en une suite parentale).', 'Parcours : chambre, dressing, salle de bain ; une seule porte depuis la chambre.', 'Lumière et air naturels : fenêtre 1.60 x 1.10 (ouverture de la baie, 1.62) pour le dressing, fenêtre 1.00 pour la salle de bain (châssis fixe dépoli ou soufflet haut au-dessus de la douche).'], 100)
+    bande(p, 722, 600, 'SURFACES NETTES (m²)', ['Avant : 2 chambres de 18.18 et 2 toilettes de 3.97.', 'Après : chambre 22.94 ; dressing 17.07 (penderie en U, allée centrale 1.92) ; salle de bain 5.19.', 'Pas d\'îlot : un îlot de 1.00 de large ne laisse pas 0.90 de passage de chaque côté.', 'Salle de bain : douche 1.00 x 1.00 avec paroi vitrée côté WC, WC et meuble vasque suspendus, pas de baignoire ; le WC n\'est pas en cabinet fermé (pièce de 2.18 x 2.38).', 'Cotes en mètres. Plan sous réserve du relevé des attentes sur site et du visa de l\'ingénieur de structure.'], 100)
     return p
 
 
