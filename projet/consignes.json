@@ -1,1 +1,25 @@
-{"projet": "<PROJET>", "consignes": []}
+{
+ "projet": "<PROJET>",
+ "consignes": [
+  {
+   "id": "C-001",
+   "date": "2026-11-02",
+   "texte": "R+1 : fusionner les deux chambres miroirs de façade en UNE suite parentale (chambre spacieuse, grande salle de bain, walk-in dressing avec îlot central, circulations confortables), avec le MOINS de modifications possible (poteaux-poutres inchangés, cloisons décloisonnables). Proposition 2D libre, règles de l'atelier appliquées.",
+   "statut": "fait",
+   "preuve": "proposition A : projet/esquisse/suite_parentale_r1.py, 16 contrôles de dégagement à 0 écart ; non encore vérifiée par le client ni par l'agent vérificateur",
+   "source": "msg 02/11 (MBAO)",
+   "moment": "APERCU",
+   "maj": "2026-11-02 20:54"
+  },
+  {
+   "id": "C-002",
+   "date": "2026-11-02",
+   "texte": "Projet MBAO = D&F Engineering, Sénégal, maître d'ouvrage Mohamed BADIANE ; plans d'architecture V2 et plan de coffrage structure fournis (projet/source/).",
+   "statut": "verifie",
+   "preuve": "plans copiés dans projet/source/, entreprise et pays dans projet/IDENTITE.json",
+   "source": "msg 02/11",
+   "moment": "BRIEF",
+   "maj": "2026-11-02 20:54"
+  }
+ ]
+}

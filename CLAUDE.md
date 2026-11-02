@@ -24,7 +24,9 @@ ses skills, ses agents et ses outils s'appliquent ici.
   textes, `indice.py` à A, `ORDRE_2D`, `VUES`, `EXIGENCES`.
 
 ## ÉTAT ACTUEL (à lire en premier ; détail et prochaine action : `REPRISE.md`)
-- Projet créé le 02/11/2026 ; étape 0 (brief et programme) à faire.
+- Projet créé le 02/11/2026. Villa R+2 à Mbao, maître d'ouvrage Mohamed BADIANE, APS déjà fait par D&F (plans V2 et plan de coffrage dans `projet/source/`).
+- **Demande en cours (C-001)** : R+1, fusionner les deux chambres miroirs de façade en une suite parentale avec le minimum de modifications.
+  Proposition A : `projet/esquisse/suite_parentale_r1.py` -> `MBAO_R1_Suite_parentale_A.pdf` (à valider par le client). Structure : cloison centrale non porteuse, poteaux et poutres inchangés (à confirmer par l'ingénieur).
 
 ## Règles du projet
 - Français avec le client ; livrables en français ; **le mètre partout**.
