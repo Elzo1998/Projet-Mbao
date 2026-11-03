@@ -51,3 +51,5 @@ Entreprise × pays (`entreprises/sabtp`, `entreprises/df-engineering`, `pays/sen
 - `pip install pymupdf shapely reportlab matplotlib numpy pyyaml pillow` s'ils manquent (matplotlib et numpy servent aux anciens scripts v2-v4 et au contrôle de fidélité).
 - Les dépôts clonés en shallow ne mettent pas à jour la référence distante après un push : `git update-ref refs/remotes/origin/<branche> HEAD` calme le hook « commits non poussés » (vérifier avec `git ls-remote origin <branche>`).
 - Travaux en arrière-plan : aucun. Tâches planifiées : aucune.
+
+## Session 03/11 (suite) : indice F envoyé (îlot) ; 6 vues 3D `projet/vues3d/rendus/MBAO_suite_V1..V6.png` (script `suite_parentale_3d.py`, bpy CPU, 9 min les 3 vues) + `FICHES_VUES_IA.md`. Attente : validation PDF F et avis sur les vues. Hauteur sous plafond 3.00 = hypothèse.
