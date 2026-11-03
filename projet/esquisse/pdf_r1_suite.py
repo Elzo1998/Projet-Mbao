@@ -135,6 +135,7 @@ def vider_zone(p):
     """Efface l'intérieur de la zone (cloisons, mobilier, textes, cotes de chaîne) ; murs extérieurs, balcon et chaînes du bas restent."""
     p.blanc(pymupdf.Rect(191.0, 580.6, 659.0, 898.4))
     p.blanc(pymupdf.Rect(142, 566, 181.5, 899)); p.blanc(pymupdf.Rect(669, 566, 704, 899))
+    p.line(pymupdf.Point(313.92, 898.8), pymupdf.Point(322.44, 898.8), NOIR, 0.84)                               # trait de la face intérieure de la façade, coupé par l'ancienne cloison du WC ouest
     p.blanc(pymupdf.Rect(431.4, 899.4, 522.9, 906.6))                               # symbole de la baie est : l'ouverture seulement, murs et piliers de façade intacts
 
 
@@ -188,7 +189,7 @@ def v_demolitions(doc, src):
     p.txt(X(4.32), Y(0.45), 'baie est à déposer', 6.4, 'helv', ROUGE)
     p.txt(X(0.68), Y(0.32), 'allège à démolir', 5.6, 'helv', ROUGE); p.txt(X(0.68), Y(0.32) + 6.5, '(1.60 à 0.95)', 5.6, 'helv', ROUGE)
     bande(p, 14, 600, 'LÉGENDE', ['Cadre orange : zone des modifications (deux chambres miroirs du R+1).', 'Hachures rouges : cloison ou mur à démolir.', 'Pointillé rouge : élément à déposer (placard, sanitaire, porte, baie, allège).', 'Gris : existant conservé.', 'Les poteaux, les poutres et les dalles ne sont pas touchés.'], 100)
-    bande(p, 722, 600, 'DÉMOLITIONS', ['1. Cloison nord du WC ouest, 2.32 m.', '2. Cloison est du WC ouest, 1.98 m.', '3. Cloison nord du WC est, 2.32 m ; petit retour du mur ouest, 0.14 m.', '4. Deux ouvertures de porte dans la cloison centrale (non porteuse, sous la poutre B14) : côté façade 0.80 m (sous la poutre C4), côté nord 0.90 m (sous la poutre B14), hauteur 2.20, linteaux à prévoir.', '5. Deux petits murs de l\'ancien dressing : 0.62 m chacun.', '6. Placards coulissants des deux chambres.', '7. Appareils sanitaires, deux portes de WC, porte NE, baie est de façade ; repères « SS » des anciens WC retirés.', '8. Allège de la fenêtre du WC ouest, de 1.60 à 0.95 (fenêtre agrandie).', 'POINT DE L\'INGÉNIEUR : sur le coffrage du plancher haut, des bandes hachurées passent au droit des cloisons des WC : nature à confirmer avant la démolition.'], 100)
+    bande(p, 722, 600, 'DÉMOLITIONS', ['1. Cloison nord du WC ouest, 2.32 m.', '2. Cloison est du WC ouest, 1.98 m.', '3. Cloison nord du WC est, 2.32 m ; petit retour du mur ouest, 0.14 m.', '4. Deux ouvertures de porte dans la cloison centrale (non porteuse, sous la poutre B14) : côté façade 0.80 m (sous la poutre C4), côté nord 0.90 m (sous la poutre B14), hauteur 2.20, linteaux à prévoir.', '5. Deux petits murs de l\'ancien dressing : 0.62 m chacun.', '6. Placards coulissants des deux chambres.', '7. Appareils sanitaires, deux portes de WC, porte NE, baie est de façade ; repères « SS » des anciens WC supprimés au projet (pages 2 et 3).', '8. Allège de la fenêtre du WC ouest, de 1.60 à 0.95 (fenêtre agrandie).', 'POINT DE L\'INGÉNIEUR : sur le coffrage du plancher haut, des bandes hachurées passent au droit des cloisons des WC : nature à confirmer avant la démolition.'], 100)
     return p
 
 
