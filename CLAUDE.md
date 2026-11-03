@@ -25,7 +25,7 @@ ses skills, ses agents et ses outils s'appliquent ici.
 
 ## ÉTAT ACTUEL (à lire en premier ; détail et prochaine action : `REPRISE.md`)
 - Projet créé le 02/11/2026 ; villa R+2 à Mbao, maître d'ouvrage Mohamed BADIANE, APS fait par D&F (plans V2 et coffrage dans `projet/source/`).
-- **Suite parentale R+1 (C-001) : version finale indice E livrée le 03/11** : `projet/livrables/MBAO_R1_Suite_parentale_indiceE_FINAL.pdf` (3 pages : démolitions, constructions, projet final). Contrôles passés (36 contrôles chiffrés, contrôle des raccords CONFORME, agent vérificateur LIVRABLE). **Validation finale du client attendue.**
+- **Suite parentale R+1 (C-001, C-011) : indice F (îlot bijoux 0.60x1.20 collé à la cloison) du 03/11, validation attendue** : `projet/livrables/MBAO_R1_Suite_parentale_indiceF_FINAL.pdf` (remplace E) (3 pages : démolitions, constructions, projet final). Contrôles passés (36 contrôles chiffrés, contrôle des raccords CONFORME, agent vérificateur LIVRABLE). **Validation finale du client attendue.**
 - Génération : `python3 -I projet/esquisse/pdf_r1_suite.py` (sort en erreur s'il reste une anomalie de raccord) ; géométrie : `projet/esquisse/suite_parentale_r1_v5.py`.
 - Atelier : règles entreprise x pays et contrôle des raccords (RAC-001 à 011) FUSIONNÉS dans `main` le 03/11/2026 (commit a71c60d, à la demande du client).
 

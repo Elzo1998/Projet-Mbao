@@ -14,7 +14,7 @@ import suite_parentale_r1_v5 as V
 import suite_parentale_r1 as B
 
 SRC = os.path.join(os.path.dirname(HERE), 'source', 'PROJET_MBAO_Architecture_V2.pdf')
-OUT = os.path.join(HERE, 'MBAO_R1_Suite_parentale_E.pdf')
+OUT = os.path.join(HERE, 'MBAO_R1_Suite_parentale_F.pdf')
 K = 1000 / 50 * 72 / 25.4                               # 1 m a 1:50 en points
 X0, Y0 = 190.6, 898.8                                    # face intérieure ouest / face intérieure de la façade (relevés sur le PDF d'origine)
 W, D = B.W, B.D
@@ -113,7 +113,7 @@ CADRE = pymupdf.Rect(143, 561, 706, 1012)
 
 def cartouche(p, titre, no):
     p.effacer([pymupdf.Rect(456, 1064, 614, 1095), pymupdf.Rect(520, 1111, 548, 1129), pymupdf.Rect(404, 1111, 458, 1129)])
-    p.blanc(pymupdf.Rect(456, 1064, 614, 1095)); titre += ' - IND. E'; p.txt(535 - pymupdf.get_text_length(titre, 'hebo', 10.5) / 2, 1085, titre, 10.5, 'hebo')
+    p.blanc(pymupdf.Rect(456, 1064, 614, 1095)); titre += ' - IND. F'; p.txt(535 - pymupdf.get_text_length(titre, 'hebo', 10.5) / 2, 1085, titre, 10.5, 'hebo')
     p.blanc(pymupdf.Rect(520, 1111, 548, 1129)); p.txt(523, 1124, no, 12, 'helv')
     p.blanc(pymupdf.Rect(404, 1111, 458, 1129)); p.txt(406, 1124, DATE, 11, 'hebo')
 
@@ -255,17 +255,17 @@ def v_constructions(doc, src):
     p.arc(*V.PORTE_SDB[:4], V.PORTE_SDB[4], BLEU); p.arc(*V.PORTE_NO[:4], V.PORTE_NO[4], ymin=580.0)
     p.rect(R(XE_M, SDB_Y - 0.052, 0.80, 0.034), None, BLEU, 0.48)
     p.rect(R(0.20, -0.15, 1.00, 0.15), None, BLEU, 1.1, '[3 2] 0'); p.txt(X(0.25), Y(0.30), 'fenêtre 100x125, allège 0.95', 5.8, 'helv', BLEU); p.txt(X(0.25), Y(0.30) + 7, 'bas fixe, haut à soufflet', 5.8, 'helv', BLEU)
-    for m in (V.U_N, V.U_E, V.U_S):
+    for m in (V.U_N, V.U_E, V.U_S, V.ILOT):
         p.rect(clip_int(R(*m[1:])), None, BLEU, 0.6)
         if m[3] >= m[4]: p.line(P(m[1] + 0.05, m[2] + m[4] / 2), P(m[1] + m[3] - 0.05, m[2] + m[4] / 2), BLEU, 0.5, '[2 2] 0')
         else: p.line(P(m[1] + m[3] / 2, m[2] + 0.05), P(m[1] + m[3] / 2, m[2] + m[4] - 0.05), BLEU, 0.5, '[2 2] 0')
     p.txt(X(6.30), Y(5.18), 'penderie en U', 6.2, 'helv', BLEU)
     for m in (V.VASQUE, V.DOUCHE, V.WC): p.rect(clip_int(R(*m[1:])), None, BLEU, 0.6)
     p.txt(X(5.66), Y(0.12), 'double vasque', 6.0, 'helv', BLEU, rot=90); p.txt(X(7.50), Y(0.74), 'douche', 6.2, 'helv', BLEU); p.txt(X(7.12), Y(0.30), 'fenêtre 100x60 :', 5.6, 'helv', BLEU); p.txt(X(7.12), Y(0.30) + 6.2, 'soufflet haut dépoli', 5.6, 'helv', BLEU)
-    p.etiquette(7.2, 1.30 + 0.1, 'SDB', S_SDB); p.etiquette(5.2, 3.95, 'DRESSING', S_DR)
+    p.etiquette(7.2, 1.30 + 0.1, 'SDB', S_SDB); p.etiquette(5.45, 3.95, 'DRESSING', S_DR)
     cadre(p, None)
     bande(p, 14, 600, 'LÉGENDE', ['Cadre orange : zone des modifications (deux chambres miroirs du R+1).', 'Bleu hachuré : MUR ou cloison neuf (épaisseur 0.15).', 'Contour bleu : menuiserie, appareil ou agencement neuf (pas un mur).', 'Gris : existant conservé.', 'Mobilier libre non figuré (voir le projet final).'], 100)
-    bande(p, 722, 600, 'CONSTRUCTIONS', ['1. Cloison nord de la salle de bain, 2.32 m, à 2.38 de la façade ; mur ouest prolongé de 0.60 m (rebouchage de 0.60 ; porte déplacée à 1.58-2.38, jambage dans le prolongement du mur nord).', '2. Fermeture de la porte NE (0.90 x 2.20) en maçonnerie.', '3. Deux ouvertures dans la cloison centrale, 80x220 (côté façade) et 90x220 (côté nord), avec linteaux : on entre et on sort du dressing de chaque côté ; sans porte.', '4. Fenêtre du dressing 160x125, allège 0.95 (à la hauteur de la double vasque), tête 2.20, dans l\'ouverture de la baie est (162) : maçonnerie d\'allège 1.62 x 0.95 à construire.', '5. Fenêtre de la chambre : l\'ancienne fenêtre du WC ouest devient 100x125, allège 0.95 : partie basse fixe, partie haute à soufflet.', '6. Double vasque 1.40 contre le mur ouest de la salle de bain ; penderie en U limitée à la ligne rouge, sans îlot.', '7. Salle de bain : douche 1.20 x 1.00 et WC suspendu, sans vasque ; porte 80x220, vantail ouvert contre le mur nord.', 'POINTS DE L\'INGÉNIEUR : (a) cloison nord de la salle de bain parallèle aux nervures 12+8, à 0.55 de l\'ancienne : poutrelle doublée ou calcul de charge ; (b) linteaux neufs de la porte 1.55-2.35 et des deux ouvertures (sous C4 et B14), appuis de 0.20, joints de désolidarisation sous poutre ; (c) attentes de plomberie à relever sur site (WC déplacé, double vasque) ; (d) étanchéité sous faïence toute hauteur derrière la double vasque et la douche.'], 100)
+    bande(p, 722, 600, 'CONSTRUCTIONS', ['1. Cloison nord de la salle de bain, 2.32 m, à 2.38 de la façade ; mur ouest prolongé de 0.60 m (rebouchage de 0.60 ; porte déplacée à 1.58-2.38, jambage dans le prolongement du mur nord).', '2. Fermeture de la porte NE (0.90 x 2.20) en maçonnerie.', '3. Deux ouvertures dans la cloison centrale, 80x220 (côté façade) et 90x220 (côté nord), avec linteaux : on entre et on sort du dressing de chaque côté ; sans porte.', '4. Fenêtre du dressing 160x125, allège 0.95 (à la hauteur de la double vasque), tête 2.20, dans l\'ouverture de la baie est (162) : maçonnerie d\'allège 1.62 x 0.95 à construire.', '5. Fenêtre de la chambre : l\'ancienne fenêtre du WC ouest devient 100x125, allège 0.95 : partie basse fixe, partie haute à soufflet.', '6. Double vasque 1.40 contre le mur ouest de la salle de bain ; penderie en U limitée à la ligne rouge ; îlot bijoux et montres 0.60 x 1.20, h 1.05, collé à la cloison centrale (meuble sur mesure, pas de maçonnerie).', '7. Salle de bain : douche 1.20 x 1.00 et WC suspendu, sans vasque ; porte 80x220, vantail ouvert contre le mur nord.', 'POINTS DE L\'INGÉNIEUR : (a) cloison nord de la salle de bain parallèle aux nervures 12+8, à 0.55 de l\'ancienne : poutrelle doublée ou calcul de charge ; (b) linteaux neufs de la porte 1.55-2.35 et des deux ouvertures (sous C4 et B14), appuis de 0.20, joints de désolidarisation sous poutre ; (c) attentes de plomberie à relever sur site (WC déplacé, double vasque) ; (d) étanchéité sous faïence toute hauteur derrière la double vasque et la douche.'], 100)
     return p
 
 
@@ -289,6 +289,8 @@ def meuble(p, m, kind):
         p.rect(r, (1, 1, 1), NOIR, 0.6)
         if l >= h: p.line(P(x + 0.05, y + h / 2), P(x + l - 0.05, y + h / 2), NOIR, 0.48, '[3 2] 0')
         else: p.line(P(x + l / 2, y + 0.05), P(x + l / 2, y + h - 0.05), NOIR, 0.48, '[3 2] 0')
+    elif kind == 'ilot':                                                        # îlot bijoux / montres : tiroirs à plat (trait plein), dessus vitré (diagonale)
+        p.rect(r, (1, 1, 1), NOIR, 0.6); p.rect(R(x + 0.04, y + 0.04, l - 0.08, h - 0.08), None, NOIR, 0.4); p.txt(X(x + l / 2) + 2, Y(y + 0.22), 'ÎLOT BIJOUX', 5.2, 'helv', (0.35,) * 3, rot=90)
     elif kind == 'douche':
         p.rect(r, (1, 1, 1), NOIR, 0.6); p.line(P(x, y), P(x + l, y + h), NOIR, 0.4); p.line(P(x, y + h), P(x + l, y), NOIR, 0.4); p.oval(R(x + l / 2 - 0.05, y + h / 2 - 0.05, 0.10, 0.10), (1, 1, 1))
     elif kind == 'wc':
@@ -306,12 +308,12 @@ def v_final(doc, src):
     for dy in (0.0, 1.0): p.line(pymupdf.Point(X(7.07), Y(1.00) + dy), pymupdf.Point(X(W) - 0.7, Y(1.00) + dy), NOIR, 0.5)   # paroi vitrée douche / WC : double trait fin, en noir comme le reste de la page
     p.arc(*V.PORTE_NO[:4], V.PORTE_NO[4], ymin=580.0); p.arc(*V.PORTE_SDB[:4], V.PORTE_SDB[4])
     p.rect(R(XE_M, SDB_Y - 0.052, 0.80, 0.034), (1, 1, 1), NOIR, 0.48)                                             # vantail de la salle de bain ouvert à plat contre le mur nord (épaisseur 0.034)
-    for m, k in ((V.LIT, 'lit'), (V.CHEV_S, 'rect'), (V.CHEV_N, 'rect'), (V.FAUT, 'faut'), (V.GUER, 'rond'), (V.COMM, 'rect'), (V.TV, 'tv'), (V.U_N, 'pend'), (V.U_E, 'pend'), (V.U_S, 'pend'), (V.VASQUE, 'vasque2'), (V.DOUCHE, 'douche'), (V.WC, 'wc')): meuble(p, m, k)
+    for m, k in ((V.LIT, 'lit'), (V.CHEV_S, 'rect'), (V.CHEV_N, 'rect'), (V.FAUT, 'faut'), (V.GUER, 'rond'), (V.COMM, 'rect'), (V.TV, 'tv'), (V.U_N, 'pend'), (V.U_E, 'pend'), (V.U_S, 'pend'), (V.ILOT, 'ilot'), (V.VASQUE, 'vasque2'), (V.DOUCHE, 'douche'), (V.WC, 'wc')): meuble(p, m, k)
     p.txt(X(6.55), Y(5.46), 'penderie', 6.2, 'helv', (0.35,) * 3)
-    p.etiquette(2.15, 4.35, 'CHAMBRE', S_CH); p.etiquette(5.2, 3.95, 'DRESSING', S_DR); p.etiquette(7.0, 1.55, 'SDB', S_SDB)
+    p.etiquette(2.15, 4.35, 'CHAMBRE', S_CH); p.etiquette(5.45, 3.95, 'DRESSING', S_DR); p.etiquette(7.0, 1.55, 'SDB', S_SDB)
     cadre(p, None)
     bande(p, 14, 600, 'LÉGENDE', ['Cadre orange : zone des modifications (deux chambres miroirs du R+1 transformées en une suite parentale).', 'Parcours : chambre, dressing, salle de bain ; on entre et on sort du dressing par deux ouvertures de porte (0.80 côté façade, 0.90 côté nord).', 'Lumière et air naturels : fenêtre 160x125 pour le dressing, fenêtre 100x125 pour la chambre (bas fixe, haut à soufflet), fenêtre 100x60 à soufflet haut dépoli pour la salle de bain, au-dessus de la douche.'], 100)
-    bande(p, 722, 600, 'SURFACES NETTES (m²)', ['Avant : 2 chambres de 18.18 et 2 toilettes de 3.97.', 'Après : chambre {CH} ; dressing {DR} (hall et penderie en U, allée centrale 1.92) ; salle de bain {SDB}, avec WC et douche seulement.', 'Double vasque 1.40 contre le mur de la salle de bain, côté dressing : elle sert de lave-mains.', 'Pas d\'îlot : un îlot de 1.00 de large ne laisse pas 0.90 de passage de chaque côté.', 'Écart au standard : fenêtre de chambre de 100 de large (standard 140 ou 160), conservée à la demande du client ; lue comme 100x125, allège 0.95 (une lecture jusqu\'au sol est possible).', 'Deux ouvertures sans porte (80x220 et 90x220) : intimité du lit et de la salle de bain à traiter si besoin. Baie ouest : porte-fenêtre coulissante, conservée.', 'Le WC n\'est pas en cabinet fermé (pièce de 2.17 x 2.38).', 'Cotes en mètres. Plan sous réserve du relevé des attentes sur site et du visa de l\'ingénieur de structure.'], 100)
+    bande(p, 722, 600, 'SURFACES NETTES (m²)', ['Avant : 2 chambres de 18.18 et 2 toilettes de 3.97.', 'Après : chambre {CH} ; dressing {DR} (hall et penderie en U, allée centrale 1.92, îlot compris 1.29) ; salle de bain {SDB}, avec WC et douche seulement.', 'Double vasque 1.40 contre le mur de la salle de bain, côté dressing : elle sert de lave-mains.', 'Îlot bijoux et montres 0.60 x 1.20, hauteur 1.05 (tiroirs et dessus vitré), collé à la face est de la cloison : passage libre >= 1.29 devant lui.', 'Écart au standard : fenêtre de chambre de 100 de large (standard 140 ou 160), conservée à la demande du client ; lue comme 100x125, allège 0.95 (une lecture jusqu\'au sol est possible).', 'Deux ouvertures sans porte (80x220 et 90x220) : intimité du lit et de la salle de bain à traiter si besoin. Baie ouest : porte-fenêtre coulissante, conservée.', 'Le WC n\'est pas en cabinet fermé (pièce de 2.17 x 2.38).', 'Cotes en mètres. Plan sous réserve du relevé des attentes sur site et du visa de l\'ingénieur de structure.'], 100)
     return p
 
 

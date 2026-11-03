@@ -100,6 +100,15 @@
    "source": "msg 03/11 (MBAO, version finale)",
    "moment": "APERCU",
    "maj": "2026-11-03 13:16"
+  },
+  {
+   "id": "C-011",
+   "date": "2026-11-03",
+   "texte": "C-011 : ilot de bijoux/montres dans le dressing, colle au mur (pas central), 0.60 de large x 1.20 de long, hauteur 1.00-1.10, avec elements (tiroirs/vitrine) ; refaire tout le PDF 3 versions avec controles puis faire valider ; ENSUITE 4 vues 3D (cameras = fleches du client sur le plan, 4 cameras) : proposer d'abord la methodologie (3D CPU textures identifiables puis rendu photoreal par le client sur ChatGPT)",
+   "statut": "fait",
+   "preuve": "PDF indice F : 42 controles 0 ecart, raccords CONFORME, verificateur LIVRABLE (0 bloquant, 2 mineurs corriges) ; attente validation client",
+   "source": "client 03/11",
+   "maj": "2026-11-03 17:35"
   }
  ]
 }

@@ -1,4 +1,4 @@
-"""MBAO - R+1 : suite parentale, version E (indice E) : géométrie et contrôles chiffrés.
+"""MBAO - R+1 : suite parentale, version F (indice F, îlot ajouté le 03/11) : géométrie et contrôles chiffrés.
 
 python3 -I projet/esquisse/suite_parentale_r1_v5.py   ->  liste des contrôles (le dessin est fait par pdf_r1_suite.py, qui importe ce module)
 Repère (mètres) : x vers l'est de 0 à 8.27, y vers le nord de 0 à 5.65, origine = angle intérieur sud-ouest de la zone ; relevé de l'existant : suite_parentale_r1.py.
@@ -32,6 +32,7 @@ COMM = ('Commode 1.20', 1.60, D - 0.45, 1.20, 0.45)
 U_N = ('Penderie U (nord)', XE_M, D - 0.60, W - XE_M, 0.60)
 U_E = ('Penderie U (est)', W - 0.60, Y_TOP, 0.60, D - 0.60 - Y_TOP)
 U_S = ('Penderie U (sud)', XE_M, Y_TOP, W - 0.60 - XE_M, 0.60)
+ILOT = ('Îlot bijoux et montres 1.20 x 0.60 (h 1.05), collé à la cloison', 4.21, 3.10, 0.60, 1.20)   # demande client 03/11 : îlot non central, 0.60 x 1.20, hauteur 1.00-1.10
 VASQUE = ('Double vasque 1.40', XM - 0.50, 0.05, 0.50, 1.40)      # contre le mur ouest de la salle de bain, façade côté fenêtre
 # ---- salle de bain 2.17 x 2.38 : douche SE sous la fenêtre existante, WC suspendu mur est (plus de vasque)
 DOUCHE = ('Douche 1.20 x 1.00', 7.07, 0.0, 1.20, 1.00)
@@ -42,7 +43,7 @@ PORTE_NO = ((0.175, 5.70), 0.787, 270, 360, 270)       # arc relevé sur le vect
 FEN_CH = (0.20, 1.20, ALLEGE, 1.25)                     # chambre : 1.00, bas fixe 0.95-1.60, haut à soufflet 1.60-2.20 (ancienne fenêtre de WC)
 FEN_DR = (4.25, 5.85, ALLEGE, 1.25)                     # dressing : 1.60 x 1.25
 FEN_SDB = (7.07, 8.07, 1.60, 0.60)                      # salle de bain : inchangée
-MEUBLES = [LIT, CHEV_S, CHEV_N, TV, FAUT, GUER, COMM, U_N, U_E, U_S, VASQUE, DOUCHE, WC]
+MEUBLES = [LIT, CHEV_S, CHEV_N, TV, FAUT, GUER, COMM, U_N, U_E, U_S, ILOT, VASQUE, DOUCHE, WC]
 
 
 def R(m): return box(m[1], m[2], m[1] + m[3], m[2] + m[4])
@@ -66,6 +67,13 @@ def controles():
     t('STR', 'Ouverture sud : hauteur 2.20 sous la sous-face de la poutre C4 (2.80), linteau de cloison à prévoir', SOUS_FACE_C4 - LINTEAU, 0.0)
     info('POR-020', 'Baie ouest 1.62 : porte-fenêtre COULISSANTE, aucun débattement : ne gêne pas l\'ouverture sud (pas d\'arc en plan)', 1)
     t('CIR-001', 'Hall du dressing : largeur libre entre la cloison centrale et les penderies (x 4.21 à 6.10)', 6.10 - 4.21, 0.90)
+    il = R(ILOT)
+    t('ILOT', 'Îlot : profondeur 0.60 et longueur 1.20 (demande client)', min(ILOT[3] / 0.60, ILOT[4] / 1.20) * 0.60, 0.60)
+    t('CIR-001', 'Îlot : passage libre entre l\'îlot et la penderie sud / penderie nord / vasque (>= 0.90)', min(il.distance(R(U_S)), il.distance(R(U_N)), il.distance(R(VASQUE)), il.distance(R(U_E))), 0.90)
+    t('CIR-001', 'Îlot : largeur libre du hall entre l\'îlot et la penderie (x 4.81 à 6.10)', 6.10 - (ILOT[1] + ILOT[3]), 0.90)
+    t('CIR-001', 'Îlot : dégagement devant l\'ouverture nord (îlot arrêté à >= 0.40 sous l\'ouverture, y 4.73)', OUV_N[0] - (ILOT[2] + ILOT[4]), 0.40)
+    t('CIR-001', 'Îlot : dégagement devant l\'ouverture sud (îlot à >= 0.90 au-dessus de l\'ouverture, y 0.80)', ILOT[2] - OUV_S[1], 0.90)
+    t('RAC', 'Îlot : collé à la face est de la cloison (écart <= 0.01)', 0.01 - abs(ILOT[1] - 4.21), 0.0)
     t('CIR-002', 'Passage entre la cloison centrale et la double vasque (ouverture sud)', vq.distance(box(4.21, 0, 4.22, D)), 0.90)
     # --- chambre
     t('CHB-001', 'Lit : tête contre le mur plein de la cloison (entre les ouvertures) : marge sud jusqu\'à l\'ouverture sud', (LIT[2] - 0.40) - OUV_S[1], 0.60)
