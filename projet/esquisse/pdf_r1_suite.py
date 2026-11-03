@@ -248,7 +248,7 @@ def v_constructions(doc, src):
     for m in CONSERVES: p.mur(m, 'ex')
     p.rect(R(XC, 1.027, 0.15, 0.15), (0.5,) * 3, NOIR, 0.5)                                                  # poteau K1 : même marque que sur le plan source
     for m in NEUFS: p.mur(m, 'neuf')                                                                         # tous les murs neufs, y compris la fermeture de la porte NE alignée sur le mur nord
-    p.txt(X(NE0) - 6, 569.0, 'fermeture porte NE', 6.2, 'helv', BLEU)
+    p.txt(X(NE0) - 6, 570.2, 'fermeture porte NE', 6.0, 'helv', BLEU)
     # ouvertures de la cloison centrale, fenêtre de la chambre, menuiseries et appareils neufs (bleu)
     for (a, b), nom in ((V.OUV_S, 'ouv. 80x220'), (V.OUV_N, 'ouv. 90x220')):
         p.rect(clip_int(R(XC, a, 0.15, b - a)), None, BLEU, 0.6, '[3 2] 0'); p.txt(X(4.36), Y(a) - 2, nom, 5.8, 'helv', BLEU, rot=90)
@@ -264,7 +264,7 @@ def v_constructions(doc, src):
     p.txt(X(5.66), Y(0.12), 'double vasque', 6.0, 'helv', BLEU, rot=90); p.txt(X(7.50), Y(0.74), 'douche', 6.2, 'helv', BLEU); p.txt(X(7.12), Y(0.30), 'fenêtre 100x60 :', 5.6, 'helv', BLEU); p.txt(X(7.12), Y(0.30) + 6.2, 'soufflet haut dépoli', 5.6, 'helv', BLEU)
     p.etiquette(7.2, 1.30 + 0.1, 'SDB', S_SDB); p.etiquette(5.2, 3.95, 'DRESSING', S_DR)
     cadre(p, None)
-    bande(p, 14, 600, 'LÉGENDE', ['Cadre orange : zone des modifications (deux chambres miroirs du R+1).', 'Bleu hachuré : mur ou cloison à construire (épaisseur 0.15).', 'Contour bleu : menuiserie, appareil ou agencement neuf.', 'Gris : existant conservé.', 'Mobilier libre non figuré (voir le projet final).'], 100)
+    bande(p, 14, 600, 'LÉGENDE', ['Cadre orange : zone des modifications (deux chambres miroirs du R+1).', 'Bleu hachuré : MUR ou cloison neuf (épaisseur 0.15).', 'Contour bleu : menuiserie, appareil ou agencement neuf (pas un mur).', 'Gris : existant conservé.', 'Mobilier libre non figuré (voir le projet final).'], 100)
     bande(p, 722, 600, 'CONSTRUCTIONS', ['1. Cloison nord de la salle de bain, 2.32 m, à 2.38 de la façade ; mur ouest prolongé de 0.60 m (rebouchage de 0.60 ; porte déplacée à 1.58-2.38, jambage dans le prolongement du mur nord).', '2. Fermeture de la porte NE (0.90 x 2.20) en maçonnerie.', '3. Deux ouvertures dans la cloison centrale, 80x220 (côté façade) et 90x220 (côté nord), avec linteaux : on entre et on sort du dressing de chaque côté ; sans porte.', '4. Fenêtre du dressing 160x125, allège 0.95 (à la hauteur de la double vasque), tête 2.20, dans l\'ouverture de la baie est (162) : maçonnerie d\'allège 1.62 x 0.95 à construire.', '5. Fenêtre de la chambre : l\'ancienne fenêtre du WC ouest devient 100x125, allège 0.95 : partie basse fixe, partie haute à soufflet.', '6. Double vasque 1.40 contre le mur ouest de la salle de bain ; penderie en U limitée à la ligne rouge, sans îlot.', '7. Salle de bain : douche 1.20 x 1.00 et WC suspendu, sans vasque ; porte 80x220, vantail ouvert contre le mur nord.', 'POINTS DE L\'INGÉNIEUR : (a) cloison nord de la salle de bain parallèle aux nervures 12+8, à 0.55 de l\'ancienne : poutrelle doublée ou calcul de charge ; (b) linteaux neufs de la porte 1.55-2.35 et des deux ouvertures (sous C4 et B14), appuis de 0.20, joints de désolidarisation sous poutre ; (c) attentes de plomberie à relever sur site (WC déplacé, double vasque) ; (d) étanchéité sous faïence toute hauteur derrière la double vasque et la douche.'], 100)
     return p
 
