@@ -24,9 +24,10 @@ ses skills, ses agents et ses outils s'appliquent ici.
   textes, `indice.py` à A, `ORDRE_2D`, `VUES`, `EXIGENCES`.
 
 ## ÉTAT ACTUEL (à lire en premier ; détail et prochaine action : `REPRISE.md`)
-- Projet créé le 02/11/2026. Villa R+2 à Mbao, maître d'ouvrage Mohamed BADIANE, APS déjà fait par D&F (plans V2 et plan de coffrage dans `projet/source/`).
-- **Demande en cours (C-001)** : R+1, fusionner les deux chambres miroirs de façade en une suite parentale avec le minimum de modifications.
-  Proposition A : `projet/esquisse/suite_parentale_r1.py` -> `MBAO_R1_Suite_parentale_A.pdf` (à valider par le client). Structure : cloison centrale non porteuse, poteaux et poutres inchangés (à confirmer par l'ingénieur).
+- Projet créé le 02/11/2026 ; villa R+2 à Mbao, maître d'ouvrage Mohamed BADIANE, APS fait par D&F (plans V2 et coffrage dans `projet/source/`).
+- **Suite parentale R+1 (C-001) : version finale indice E livrée le 03/11** : `projet/livrables/MBAO_R1_Suite_parentale_indiceE_FINAL.pdf` (3 pages : démolitions, constructions, projet final). Contrôles passés (36 contrôles chiffrés, contrôle des raccords CONFORME, agent vérificateur LIVRABLE). **Validation finale du client attendue.**
+- Génération : `python3 -I projet/esquisse/pdf_r1_suite.py` (sort en erreur s'il reste une anomalie de raccord) ; géométrie : `projet/esquisse/suite_parentale_r1_v5.py`.
+- Atelier : branche `claude/exciting-cannon-gv8rr1` (entreprise x pays, contrôle des raccords RAC-001 à 011) à fusionner dans main après validation du client.
 
 ## Règles du projet
 - Français avec le client ; livrables en français ; **le mètre partout**.
