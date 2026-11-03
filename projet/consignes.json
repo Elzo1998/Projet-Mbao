@@ -70,6 +70,15 @@
    "source": "msg 03/11 (MBAO, version E)",
    "moment": "APERCU",
    "maj": "2026-11-03 00:17"
+  },
+  {
+   "id": "C-008",
+   "date": "2026-11-03",
+   "texte": "Retours sur la version E : (1) mauvais raccords (accrochages) des murs de façade : pilier entre la baie ouest et la fenêtre du dressing, pied du mur ouest de la salle de bain ; (2) la baie ouest est une porte-fenêtre COULISSANTE : aucun arc ni envergure d'ouverture sur les plans (supprimer mon battant fixe et son arc) ; règle valable pour toutes les portes coulissantes.",
+   "statut": "a_faire",
+   "preuve": "",
+   "source": "msg 03/11 (MBAO, retours E)",
+   "moment": "APERCU"
   }
  ]
 }

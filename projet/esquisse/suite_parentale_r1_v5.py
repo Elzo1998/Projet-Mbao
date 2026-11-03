@@ -63,10 +63,7 @@ def controles():
     t('PORTE', 'Ouverture nord : largeur >= 0.80', OUV_N[1] - OUV_N[0], 0.80)
     t('STR', 'Ouverture nord : hauteur 2.20 sous la sous-face de la poutre B14 (2.75), linteau de cloison à prévoir', POUTRE_B14 - LINTEAU, 0.0)
     t('STR', 'Ouverture sud : hauteur 2.20 sous la sous-face de la poutre C4 (2.80), linteau de cloison à prévoir', SOUS_FACE_C4 - LINTEAU, 0.0)
-    # baie ouest 1.62 existante (battants articulés aux montants, ouverts à 90 degrés) : le battant est est rendu FIXE, sinon, ouvert, il bloque l'ouverture sud
-    bat_o, bat_e = pie((2.405, 0), 0.81, 0, 90), pie((4.025, 0), 0.81, 90, 180)
-    info('POR-019', 'Baie ouest : battant est rendu FIXE (ouvert à 90 degrés il barrerait l\'ouverture sud) : hypothèse à valider par le client', 1)
-    t('POR-019', 'Baie ouest : le battant ouest (seul ouvrant) laisse libre l\'ouverture sud (distance)', bat_o.distance(box(4.06, OUV_S[0], 4.21, OUV_S[1])), 0.30)
+    info('POR-020', 'Baie ouest 1.62 : porte-fenêtre COULISSANTE, aucun débattement : ne gêne pas l\'ouverture sud (pas d\'arc en plan)', 1)
     t('CIR-001', 'Hall du dressing : largeur libre entre la cloison centrale et les penderies (x 4.21 à 6.10)', 6.10 - 4.21, 0.90)
     t('CIR-002', 'Passage entre la cloison centrale et la double vasque (ouverture sud)', vq.distance(box(4.21, 0, 4.22, D)), 0.90)
     # --- chambre

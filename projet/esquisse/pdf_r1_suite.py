@@ -51,7 +51,7 @@ class Pg:
 
     def effacer(self, rects):
         """Supprime le TEXTE d'origine sous ces zones (pas de texte caché dans le PDF) ; le tracé vectoriel est laissé, un cache blanc le couvre."""
-        for r in rects: self.pg.add_redact_annot(r, fill=(1, 1, 1))
+        for r in rects: self.pg.add_redact_annot(r, fill=False)             # texte seulement : aucun fond blanc, les murs dessous restent
         self.pg.apply_redactions(images=0, graphics=0)
 
     def txt(self, x, y, t, size=8, font='helv', color=NOIR, rot=0, centre=False):
@@ -131,18 +131,16 @@ def wrap(t, larg, size):
 
 
 def vider_zone(p):
-    p.effacer([pymupdf.Rect(191.0, 580.6, 659.0, 898.4), pymupdf.Rect(142, 566, 181.5, 899), pymupdf.Rect(669, 566, 704, 899), pymupdf.Rect(421, 899.2, 536, 906.8), pymupdf.Rect(315, 897.5, 335, 912), pymupdf.Rect(541, 897.5, 561, 912)])
+    p.effacer([pymupdf.Rect(191.0, 580.6, 659.0, 898.4), pymupdf.Rect(142, 566, 181.5, 899), pymupdf.Rect(669, 566, 704, 899), pymupdf.Rect(315, 897.5, 335, 912), pymupdf.Rect(541, 897.5, 561, 912)])
     """Efface l'intérieur de la zone (cloisons, mobilier, textes, cotes de chaîne) ; murs extérieurs, balcon et chaînes du bas restent."""
     p.blanc(pymupdf.Rect(191.0, 580.6, 659.0, 898.4))
     p.blanc(pymupdf.Rect(142, 566, 181.5, 899)); p.blanc(pymupdf.Rect(669, 566, 704, 899))
-    p.blanc(pymupdf.Rect(421, 899.2, 536, 906.8))                                   # symbole de la baie est (façade)
+    p.blanc(pymupdf.Rect(431.4, 899.4, 522.9, 906.6))                               # symbole de la baie est : l'ouverture seulement, murs et piliers de façade intacts
 
 
 def retirer_ss(p):
-    """Retire les repères « SS » des anciens WC sur la façade ; mur et bord du balcon sont redessinés."""
-    for x0, x1 in ((315, 335), (541, 561)):
-        p.blanc(pymupdf.Rect(x0, 897.5, x1, 912)); p.rect(pymupdf.Rect(x0, 898.8, x1, 907.2), GRIS, None, 0)
-        p.line(pymupdf.Point(x0, 898.8), pymupdf.Point(x1, 898.8), NOIR, 0.84); p.line(pymupdf.Point(x0, 907.2), pymupdf.Point(x1, 907.2), NOIR, 0.84)
+    """Les repères « SS » des anciens WC sont effacés comme texte par vider_zone ; rien n'est redessiné sur la façade."""
+    return
 
 
 def chaines(p):
@@ -175,6 +173,7 @@ def fenetre_est(p, final):
 # ---------------------------------------------------------------------------------------------------- version 1 : démolitions
 def v_demolitions(doc, src):
     p = Pg(doc, src); cartouche(p, 'R+1 - DEMOLITIONS', '016'); cadre(p, None)
+    for xa, xb in ((2.405, 4.025), (4.245, 5.865)): p.blanc(pymupdf.Rect(X(xa) + 1.2, Y(0.86), X(xb) - 1.2, Y(0.035)))      # portes-fenêtres coulissantes : pas d'arc d'ouverture en plan
     for c in (B.CLOIS_EXISTANT[0], B.CLOIS_EXISTANT[1], B.CLOIS_EXISTANT[2]): p.mur(c, 'demol')               # WC ouest (2 murs), mur nord du WC est
     p.mur((5.95, 1.84, 0.14, 0.14), 'demol')                                                                  # retour du mur ouest du WC est
     p.mur((4.06, V.OUV_S[0], 0.15, V.OUV_S[1] - V.OUV_S[0]), 'demol')                                         # ouverture côté façade (cloison centrale)
@@ -185,7 +184,7 @@ def v_demolitions(doc, src):
     for r in ((0.0, 0.6, 0.6, 0.85), (1.50, 0.0, 0.70, 0.55), (7.65, 0.6, 0.62, 0.85), (6.1, 0.0, 0.70, 0.55)): p.rect(R(*r), None, ROUGE, 1.0, '[3 2] 0')   # sanitaires
     p.txt(X(0.10), Y(2.35), 'appareils sanitaires', 6.2, 'helv', ROUGE); p.txt(X(0.10), Y(2.35) + 7, 'à déposer', 6.2, 'helv', ROUGE)
     for r in ((2.18, 0.98, 0.14, 0.86), (5.95, 0.98, 0.14, 0.86), (7.22, 5.65, 0.90, 0.15), (4.245, -0.15, 1.62, 0.15), (0.20, -0.15, 1.00, 0.15)): p.rect(R(*r), None, ROUGE, 1.1, '[3 2] 0')   # portes des WC, porte NE, baie est, fenêtre du WC ouest
-    p.txt(X(6.30), Y(5.52), 'porte NE', 6.2, 'helv', ROUGE); p.txt(X(6.30), Y(5.52) + 6.5, 'à déposer', 6.2, 'helv', ROUGE)
+    p.txt(X(7.20), Y(4.62), 'porte NE à déposer', 6.2, 'helv', ROUGE)
     p.txt(X(4.32), Y(0.45), 'baie est à déposer', 6.4, 'helv', ROUGE)
     p.txt(X(0.68), Y(0.32), 'allège à démolir', 5.6, 'helv', ROUGE); p.txt(X(0.68), Y(0.32) + 6.5, '(1.60 à 0.95)', 5.6, 'helv', ROUGE)
     bande(p, 14, 600, 'LÉGENDE', ['Cadre orange : zone des modifications (deux chambres miroirs du R+1).', 'Hachures rouges : cloison ou mur à démolir.', 'Pointillé rouge : élément à déposer (placard, sanitaire, porte, baie, allège).', 'Gris : existant conservé.', 'Les poteaux, les poutres et les dalles ne sont pas touchés.'], 100)
@@ -205,7 +204,6 @@ def v_constructions(doc, src):
     for (a, b), nom in ((V.OUV_S, 'ouv. 80x220'), (V.OUV_N, 'ouv. 90x220')):
         p.rect(R(4.06, a, 0.15, b - a), None, BLEU, 0.9, '[3 2] 0'); p.txt(X(4.36), Y(a) - 2, nom, 5.8, 'helv', BLEU, rot=90)
     p.arc(*V.PORTE_SDB[:4], V.PORTE_SDB[4], BLEU); p.arc(*V.PORTE_NO[:4], V.PORTE_NO[4], (0.35,) * 3)
-    p.arc((2.405, 0.0), 0.81, 0, 90, 90, (0.35,) * 3); p.txt(X(3.05), Y(0.32), 'battant est fixe', 5.6, 'helv', BLEU)
     p.rect(R(0.20, -0.15, 1.00, 0.15), None, BLEU, 1.1, '[3 2] 0'); p.txt(X(0.25), Y(0.30), 'fenêtre 100x125, allège 0.95', 5.8, 'helv', BLEU); p.txt(X(0.25), Y(0.30) + 7, 'bas fixe, haut à soufflet', 5.8, 'helv', BLEU)
     for m in (V.U_N, V.U_E, V.U_S):
         p.rect(R(*m[1:]), None, BLEU, 1.0)
@@ -217,7 +215,7 @@ def v_constructions(doc, src):
     p.etiquette(7.2, 1.30 + 0.1, 'SDB', (W - 6.10) * SDB_Y); p.etiquette(5.2, 3.95, 'DRESSING', 4.06 * (D - Y_TOP) + 1.74 * Y_TOP)
     cadre(p, None)
     bande(p, 14, 600, 'LÉGENDE', ['Cadre orange : zone des modifications (deux chambres miroirs du R+1).', 'Bleu hachuré : mur ou cloison à construire (épaisseur 0.15).', 'Contour bleu : menuiserie, appareil ou agencement neuf.', 'Gris : existant conservé.', 'Mobilier libre non figuré (voir le projet final).'], 100)
-    bande(p, 722, 600, 'CONSTRUCTIONS', ['1. Cloison nord de la salle de bain, 2.32 m, à 2.38 de la façade ; mur ouest prolongé de 0.75 m (rebouchage 0.57 et mur au-dessus de la porte déplacée à 1.55-2.35).', '2. Fermeture de la porte NE (0.90 x 2.20) en maçonnerie.', '3. Deux ouvertures dans la cloison centrale, 80x220 (côté façade) et 90x220 (côté nord), avec linteaux : on entre et on sort du dressing de chaque côté ; sans porte.', '4. Fenêtre du dressing 160x125, allège 0.95 (à la hauteur de la double vasque), tête 2.20, dans l\'ouverture de la baie est (162) : maçonnerie d\'allège 1.62 x 0.95 à construire.', '5. Fenêtre de la chambre : l\'ancienne fenêtre du WC ouest devient 100x125, allège 0.95 : partie basse fixe, partie haute à soufflet.', '6. Double vasque 1.40 contre le mur ouest de la salle de bain ; penderie en U limitée à la ligne rouge, sans îlot.', '7. Salle de bain : douche 1.20 x 1.00 et WC suspendu, sans vasque ; porte 80x220, vantail ouvert contre le mur nord.', '8. Baie ouest (162) : le battant est est rendu fixe ; ouvert à 90 degrés il barrerait l\'ouverture côté façade (hypothèse à valider).', 'POINTS DE L\'INGÉNIEUR : (a) cloison nord de la salle de bain parallèle aux nervures 12+8, à 0.55 de l\'ancienne : poutrelle doublée ou calcul de charge ; (b) linteaux neufs de la porte 1.55-2.35 et des deux ouvertures (sous C4 et B14), appuis de 0.20, joints de désolidarisation sous poutre ; (c) attentes de plomberie à relever sur site (WC déplacé, double vasque) ; (d) étanchéité sous faïence toute hauteur derrière la double vasque et la douche.'], 100)
+    bande(p, 722, 600, 'CONSTRUCTIONS', ['1. Cloison nord de la salle de bain, 2.32 m, à 2.38 de la façade ; mur ouest prolongé de 0.75 m (rebouchage 0.57 et mur au-dessus de la porte déplacée à 1.55-2.35).', '2. Fermeture de la porte NE (0.90 x 2.20) en maçonnerie.', '3. Deux ouvertures dans la cloison centrale, 80x220 (côté façade) et 90x220 (côté nord), avec linteaux : on entre et on sort du dressing de chaque côté ; sans porte.', '4. Fenêtre du dressing 160x125, allège 0.95 (à la hauteur de la double vasque), tête 2.20, dans l\'ouverture de la baie est (162) : maçonnerie d\'allège 1.62 x 0.95 à construire.', '5. Fenêtre de la chambre : l\'ancienne fenêtre du WC ouest devient 100x125, allège 0.95 : partie basse fixe, partie haute à soufflet.', '6. Double vasque 1.40 contre le mur ouest de la salle de bain ; penderie en U limitée à la ligne rouge, sans îlot.', '7. Salle de bain : douche 1.20 x 1.00 et WC suspendu, sans vasque ; porte 80x220, vantail ouvert contre le mur nord.', 'POINTS DE L\'INGÉNIEUR : (a) cloison nord de la salle de bain parallèle aux nervures 12+8, à 0.55 de l\'ancienne : poutrelle doublée ou calcul de charge ; (b) linteaux neufs de la porte 1.55-2.35 et des deux ouvertures (sous C4 et B14), appuis de 0.20, joints de désolidarisation sous poutre ; (c) attentes de plomberie à relever sur site (WC déplacé, double vasque) ; (d) étanchéité sous faïence toute hauteur derrière la double vasque et la douche.'], 100)
     return p
 
 
@@ -246,17 +244,18 @@ def meuble(p, m, kind):
 
 def v_final(doc, src):
     p = Pg(doc, src); cartouche(p, 'R+1 - PROJET FINAL', '018'); vider_zone(p); retirer_ss(p); chaines(p); fenetre_est(p, True)
-    for m in ((4.06, V.OUV_S[1], 0.15, V.OUV_N[0] - V.OUV_S[1]), (5.95, 0, 0.14, 0.98), (5.95, 0.98, 0.15, 0.57), (5.95, 2.35, 0.15, Y_TOP - 2.35), (5.95, SDB_Y, W - 5.95, 0.15)): p.mur(m, 'ex')
+    p.mur((4.06, V.OUV_S[1], 0.15, V.OUV_N[0] - V.OUV_S[1]), 'ex'); p.mur((5.95, 0, 0.15, 1.55), 'ex')                 # cloison centrale ; mur ouest de la salle de bain (une seule pièce, sans joint apparent)
+    L = [(5.95, 2.35), (6.10, 2.35), (6.10, SDB_Y), (W, SDB_Y), (W, Y_TOP), (5.95, Y_TOP)]                              # mur au-dessus de la porte et mur nord de la salle de bain d'un seul tenant
+    p.poly([P(*q) for q in L], NOIR, 0.84, None, GRIS, True)
     p.rect(R(4.06, 0.81, 0.15, 0.60), (0.5,) * 3, NOIR, 0.5); p.rect(R(7.22, D, 0.90, 0.15), GRIS, NOIR, 0.84)       # K1, porte NE fermée
     p.line(P(7.07, 1.00), P(W, 1.00), (0.2, 0.5, 0.9), 1.2)                                                           # paroi vitrée douche / WC
     p.arc(*V.PORTE_NO[:4], V.PORTE_NO[4]); p.arc(*V.PORTE_SDB[:4], V.PORTE_SDB[4])
-    p.arc((2.405, 0.0), 0.81, 0, 90, 90); p.txt(X(3.05), Y(0.32), 'battant fixe', 5.6, 'helv', (0.35,) * 3)           # baie ouest : battant ouest ouvrant, battant est fixe
     for m, k in ((V.LIT, 'lit'), (V.CHEV_S, 'rect'), (V.CHEV_N, 'rect'), (V.FAUT, 'faut'), (V.GUER, 'rond'), (V.COMM, 'rect'), (V.TV, 'tv'), (V.U_N, 'pend'), (V.U_E, 'pend'), (V.U_S, 'pend'), (V.VASQUE, 'vasque2'), (V.DOUCHE, 'douche'), (V.WC, 'wc')): meuble(p, m, k)
     p.txt(X(6.55), Y(5.35), 'penderie', 6.2, 'helv', (0.35,) * 3)
     p.etiquette(2.15, 4.35, 'CHAMBRE', 4.06 * D); p.etiquette(5.2, 3.95, 'DRESSING', 4.06 * (D - Y_TOP) + 1.74 * Y_TOP); p.etiquette(7.0, 1.55, 'SDB', (W - 6.10) * SDB_Y)
     cadre(p, None)
     bande(p, 14, 600, 'LÉGENDE', ['Cadre orange : zone des modifications (deux chambres miroirs du R+1 transformées en une suite parentale).', 'Parcours : chambre, dressing, salle de bain ; on entre et on sort du dressing par deux ouvertures de porte (0.80 côté façade, 0.90 côté nord).', 'Lumière et air naturels : fenêtre 160x125 pour le dressing, fenêtre 100x125 pour la chambre (bas fixe, haut à soufflet), fenêtre 100x60 à soufflet haut dépoli pour la salle de bain, au-dessus de la douche.'], 100)
-    bande(p, 722, 600, 'SURFACES NETTES (m²)', ['Avant : 2 chambres de 18.18 et 2 toilettes de 3.97.', 'Après : chambre 22.94 ; dressing 17.07 (hall et penderie en U, allée centrale 1.92) ; salle de bain 5.16, avec WC et douche seulement.', 'Double vasque 1.40 contre le mur de la salle de bain, côté dressing : elle sert de lave-mains.', 'Pas d\'îlot : un îlot de 1.00 de large ne laisse pas 0.90 de passage de chaque côté.', 'Écart au standard : fenêtre de chambre de 100 de large (standard 140 ou 160), conservée à la demande du client ; lue comme 100x125, allège 0.95 (une lecture jusqu\'au sol est possible).', 'Deux ouvertures sans porte (80x220 et 90x220) : intimité du lit et de la salle de bain à traiter si besoin ; baie ouest : battant est fixe.', 'Le WC n\'est pas en cabinet fermé (pièce de 2.17 x 2.38).', 'Cotes en mètres. Plan sous réserve du relevé des attentes sur site et du visa de l\'ingénieur de structure.'], 100)
+    bande(p, 722, 600, 'SURFACES NETTES (m²)', ['Avant : 2 chambres de 18.18 et 2 toilettes de 3.97.', 'Après : chambre 22.94 ; dressing 17.07 (hall et penderie en U, allée centrale 1.92) ; salle de bain 5.16, avec WC et douche seulement.', 'Double vasque 1.40 contre le mur de la salle de bain, côté dressing : elle sert de lave-mains.', 'Pas d\'îlot : un îlot de 1.00 de large ne laisse pas 0.90 de passage de chaque côté.', 'Écart au standard : fenêtre de chambre de 100 de large (standard 140 ou 160), conservée à la demande du client ; lue comme 100x125, allège 0.95 (une lecture jusqu\'au sol est possible).', 'Deux ouvertures sans porte (80x220 et 90x220) : intimité du lit et de la salle de bain à traiter si besoin. Baie ouest : porte-fenêtre coulissante, conservée.', 'Le WC n\'est pas en cabinet fermé (pièce de 2.17 x 2.38).', 'Cotes en mètres. Plan sous réserve du relevé des attentes sur site et du visa de l\'ingénieur de structure.'], 100)
     return p
 
 
