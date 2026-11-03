@@ -16,12 +16,13 @@ W, D = B.W, B.D
 SDB_Y, Y_TOP = 2.38, 2.53                               # profondeur intérieure de la salle de bain (1.83 + 0.55) ; dessus de son mur nord
 OUV_S, OUV_N = (0.0, 0.80), (4.75, D)                   # ouvertures dans la cloison centrale (y) : côté façade et côté nord
 LINTEAU, ALLEGE = 2.20, 0.95                            # linteau commun ; allège standard (fenêtre 1.25 de haut)
+SOUS_FACE_C4 = 2.80                                     # sous-face de la poutre C4 (15x60) au-dessus de l'ouverture sud (coffrage p.5)
 POUTRE_B14 = 2.75                                       # sous-face de la poutre B14 (15x65) au-dessus de la cloison, depuis le sol fini (coffrage p.5)
 
 # ---- chambre : lit tête contre la cloison centrale entre les deux ouvertures, TV en face sur le mur ouest
 YC = (OUV_S[1] + OUV_N[0]) / 2                          # axe de la cloison pleine entre les ouvertures
-LIT = ('Lit 1.80 x 2.00', 4.06 - 2.10, YC - 0.90, 2.10, 1.80)
-CHEV_S, CHEV_N = ('Chevet', 3.61, YC - 0.90 - 0.45, 0.45, 0.45), ('Chevet', 3.61, YC + 0.90, 0.45, 0.45)
+LIT = ('Lit 1.80 x 2.00 (encombrement 1.86)', 4.06 - 2.10, YC - 0.93, 2.10, 1.86)
+CHEV_S, CHEV_N = ('Chevet', 3.66, YC - 0.93 - 0.40, 0.40, 0.40), ('Chevet', 3.66, YC + 0.93, 0.40, 0.40)
 TV = ('Meuble TV 1.40', 0.0, YC - 0.70, 0.40, 1.40)
 FAUT = ('Fauteuil', 0.35, 0.25, 0.80, 0.80)
 GUER = ('Guéridon', 1.25, 0.42, 0.45, 0.45)
@@ -60,16 +61,21 @@ def controles():
     # --- ouvertures de la cloison centrale
     t('PORTE', 'Ouverture sud (côté façade) : largeur >= 0.80 entre la façade et le poteau K1 (y 0.81)', OUV_S[1] - OUV_S[0], 0.80)
     t('PORTE', 'Ouverture nord : largeur >= 0.80', OUV_N[1] - OUV_N[0], 0.80)
-    t('STR', 'Ouvertures : hauteur 2.20 sous la sous-face de la poutre B14 (2.75), linteau de cloison à prévoir', POUTRE_B14 - LINTEAU, 0.0)
+    t('STR', 'Ouverture nord : hauteur 2.20 sous la sous-face de la poutre B14 (2.75), linteau de cloison à prévoir', POUTRE_B14 - LINTEAU, 0.0)
+    t('STR', 'Ouverture sud : hauteur 2.20 sous la sous-face de la poutre C4 (2.80), linteau de cloison à prévoir', SOUS_FACE_C4 - LINTEAU, 0.0)
+    # baie ouest 1.62 existante (battants articulés aux montants, ouverts à 90 degrés) : le battant est est rendu FIXE, sinon, ouvert, il bloque l'ouverture sud
+    bat_o, bat_e = pie((2.405, 0), 0.81, 0, 90), pie((4.025, 0), 0.81, 90, 180)
+    info('POR-019', 'Baie ouest : battant est rendu FIXE (ouvert à 90 degrés il barrerait l\'ouverture sud) : hypothèse à valider par le client', 1)
+    t('POR-019', 'Baie ouest : le battant ouest (seul ouvrant) laisse libre l\'ouverture sud (distance)', bat_o.distance(box(4.06, OUV_S[0], 4.21, OUV_S[1])), 0.30)
     t('CIR-001', 'Hall du dressing : largeur libre entre la cloison centrale et les penderies (x 4.21 à 6.10)', 6.10 - 4.21, 0.90)
     t('CIR-002', 'Passage entre la cloison centrale et la double vasque (ouverture sud)', vq.distance(box(4.21, 0, 4.22, D)), 0.90)
     # --- chambre
-    t('CHB-001', 'Lit : tête contre le mur plein de la cloison (entre les ouvertures) : marge sud jusqu\'à l\'ouverture sud', (LIT[2] - 0.45) - OUV_S[1], 0.60)
-    t('CHB-001', 'Lit : marge nord jusqu\'à l\'ouverture nord (chevets compris)', OUV_N[0] - (LIT[2] + 1.80 + 0.45), 0.60)
+    t('CHB-001', 'Lit : tête contre le mur plein de la cloison (entre les ouvertures) : marge sud jusqu\'à l\'ouverture sud', (LIT[2] - 0.40) - OUV_S[1], 0.60)
+    t('CHB-001', 'Lit : marge nord jusqu\'à l\'ouverture nord (chevets compris)', OUV_N[0] - (LIT[2] + LIT[4] + 0.40), 0.60)
     t('CIR-004', 'Chambre : côté façade du lit / mur de façade', lit.distance(box(0, -0.15, 4.06, 0)), 0.60)
     t('CIR-004', 'Chambre : côté nord du lit / mur nord', lit.distance(box(0, D, 4.06, D + 0.1)), 0.60)
     t('CIR-005', 'Chambre : pied du lit / meuble TV', lit.distance(tv), 0.70)
-    t('AXE', 'Meuble TV axé sur le lit (écart des axes, max 0.05)', 0.05 - abs((TV[2] + TV[4] / 2) - (LIT[2] + 0.90)), 0.0)
+    t('AXE', 'Meuble TV axé sur le lit (écart des axes, max 0.05)', 0.05 - abs((TV[2] + TV[4] / 2) - (LIT[2] + LIT[4] / 2)), 0.0)
     for nom, (c, r, a0, a1, _), obst in (('Porte NO', PORTE_NO, [R(COMM), R(TV), lit, R(CHEV_N)]), ('Porte SDB', PORTE_SDB, [R(DOUCHE), R(WC), vq])):
         p = pie(c, r, a0, a1); t('CIR-030', nom + ' : débattement libre', min(-p.intersection(o).area if p.intersection(o).area > 1e-6 else p.distance(o) for o in obst), 0.0)
     t('CIR-003', 'Commode : libre devant (côté sud, jusqu\'au fauteuil / lit)', R(COMM).distance(lit), 0.70)
