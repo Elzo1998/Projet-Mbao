@@ -15,8 +15,8 @@ ses skills, ses agents et ses outils s'appliquent ici.
   pas, rattacher l'atelier sans rien demander : `add_repo` (owner elzo1998, repo atelier-archi-ingenierie, accès push),
   `git clone` dans ce chemin, puis `register_repo_root` pour que ses règles, skills et agents se chargent ; ensuite lire
   son CLAUDE.md. Si l'accès est refusé, donner à l'utilisateur la raison exacte et le remède indiqués par l'outil.
-  **S'il existe déjà, le mettre à jour** : `git -C /home/user/atelier-archi-ingenierie checkout main && git -C
-  /home/user/atelier-archi-ingenierie pull origin main` (les dernières méthodes et règles validées s'appliquent à chaque reprise).
+  **S'il existe déjà, le mettre à jour** : `git -C /home/user/atelier-archi-ingenierie checkout claude/exciting-cannon-gv8rr1 && git -C
+  /home/user/atelier-archi-ingenierie pull origin claude/exciting-cannon-gv8rr1` (branche qui porte les règles entreprise x pays et le contrôle des raccords ; revenir à `main` seulement après sa fusion) (les dernières méthodes et règles validées s'appliquent à chaque reprise).
 - **Point d'entrée** : skill `nouveau-projet-archi` au démarrage, puis `01-esquisse` pour la phase 1 (enchaîne
   00-brief, 01a..01d, archivage-livrable, passation).
 - **Projet de référence** : YAMA HOUSE (dépôt elzo1998/yama-house ; livrable validé dans
