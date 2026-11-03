@@ -49,6 +49,11 @@ class Pg:
 
     def blanc(self, r): self.rect(r, fill=(1, 1, 1), color=None, w=0)
 
+    def effacer(self, rects):
+        """Supprime le TEXTE d'origine sous ces zones (pas de texte caché dans le PDF) ; le tracé vectoriel est laissé, un cache blanc le couvre."""
+        for r in rects: self.pg.add_redact_annot(r, fill=(1, 1, 1))
+        self.pg.apply_redactions(images=0, graphics=0)
+
     def txt(self, x, y, t, size=8, font='helv', color=NOIR, rot=0, centre=False):
         if centre: x -= pymupdf.get_text_length(t, fontname=font, fontsize=size) / 2 * (1 if rot == 0 else 0)
         self.pg.insert_text(pymupdf.Point(x, y), t, fontsize=size, fontname=font, color=color, rotate=rot)
@@ -96,6 +101,7 @@ CADRE = pymupdf.Rect(160, 561, 706, 1012)
 
 
 def cartouche(p, titre, no):
+    p.effacer([pymupdf.Rect(456, 1064, 614, 1095), pymupdf.Rect(520, 1111, 548, 1129), pymupdf.Rect(404, 1111, 458, 1129)])
     p.blanc(pymupdf.Rect(456, 1064, 614, 1095)); titre += ' - IND. E'; p.txt(535 - pymupdf.get_text_length(titre, 'hebo', 10.5) / 2, 1085, titre, 10.5, 'hebo')
     p.blanc(pymupdf.Rect(520, 1111, 548, 1129)); p.txt(523, 1124, no, 12, 'helv')
     p.blanc(pymupdf.Rect(404, 1111, 458, 1129)); p.txt(406, 1124, DATE, 11, 'hebo')
@@ -125,6 +131,7 @@ def wrap(t, larg, size):
 
 
 def vider_zone(p):
+    p.effacer([pymupdf.Rect(191.0, 580.6, 659.0, 898.4), pymupdf.Rect(142, 566, 181.5, 899), pymupdf.Rect(669, 566, 704, 899), pymupdf.Rect(421, 899.2, 536, 906.8), pymupdf.Rect(315, 897.5, 335, 912), pymupdf.Rect(541, 897.5, 561, 912)])
     """Efface l'intérieur de la zone (cloisons, mobilier, textes, cotes de chaîne) ; murs extérieurs, balcon et chaînes du bas restent."""
     p.blanc(pymupdf.Rect(191.0, 580.6, 659.0, 898.4))
     p.blanc(pymupdf.Rect(142, 566, 181.5, 899)); p.blanc(pymupdf.Rect(669, 566, 704, 899))
@@ -162,7 +169,7 @@ def fenetre_est(p, final):
     p.rect(R(4.245, -0.15, 1.62, 0.15), (1, 1, 1), NOIR, 0.48)
     for yy in (-0.05, -0.10): p.line(P(4.245, yy), P(5.865, yy), NOIR, 0.48)
     p.line(P(5.05, -0.05), P(5.05, -0.10), NOIR, 0.48)
-    if not final: p.txt(X(4.28), Y(1.62), 'fenêtre 160x125, allège 0.95', 6.0, 'helv', BLEU)
+    if not final: p.txt(X(4.52), Y(0.45), 'fenêtre 160x125', 6.0, 'helv', BLEU); p.txt(X(4.52), Y(0.45) + 6.5, 'allège 0.95', 6.0, 'helv', BLEU)
 
 
 # ---------------------------------------------------------------------------------------------------- version 1 : démolitions
@@ -178,7 +185,7 @@ def v_demolitions(doc, src):
     for r in ((0.0, 0.6, 0.6, 0.85), (1.50, 0.0, 0.70, 0.55), (7.65, 0.6, 0.62, 0.85), (6.1, 0.0, 0.70, 0.55)): p.rect(R(*r), None, ROUGE, 1.0, '[3 2] 0')   # sanitaires
     p.txt(X(0.10), Y(2.35), 'appareils sanitaires', 6.2, 'helv', ROUGE); p.txt(X(0.10), Y(2.35) + 7, 'à déposer', 6.2, 'helv', ROUGE)
     for r in ((2.18, 0.98, 0.14, 0.86), (5.95, 0.98, 0.14, 0.86), (7.22, 5.65, 0.90, 0.15), (4.245, -0.15, 1.62, 0.15), (0.20, -0.15, 1.00, 0.15)): p.rect(R(*r), None, ROUGE, 1.1, '[3 2] 0')   # portes des WC, porte NE, baie est, fenêtre du WC ouest
-    p.txt(X(7.12), Y(5.42), 'porte NE à déposer', 6.2, 'helv', ROUGE)
+    p.txt(X(6.30), Y(5.52), 'porte NE', 6.2, 'helv', ROUGE); p.txt(X(6.30), Y(5.52) + 6.5, 'à déposer', 6.2, 'helv', ROUGE)
     p.txt(X(4.32), Y(0.45), 'baie est à déposer', 6.4, 'helv', ROUGE)
     p.txt(X(0.68), Y(0.32), 'allège à démolir', 5.6, 'helv', ROUGE); p.txt(X(0.68), Y(0.32) + 6.5, '(1.60 à 0.95)', 5.6, 'helv', ROUGE)
     bande(p, 14, 600, 'LÉGENDE', ['Cadre orange : zone des modifications (deux chambres miroirs du R+1).', 'Hachures rouges : cloison ou mur à démolir.', 'Pointillé rouge : élément à déposer (placard, sanitaire, porte, baie, allège).', 'Gris : existant conservé.', 'Les poteaux, les poutres et les dalles ne sont pas touchés.'], 100)
@@ -198,7 +205,7 @@ def v_constructions(doc, src):
     for (a, b), nom in ((V.OUV_S, 'ouv. 80x220'), (V.OUV_N, 'ouv. 90x220')):
         p.rect(R(4.06, a, 0.15, b - a), None, BLEU, 0.9, '[3 2] 0'); p.txt(X(4.36), Y(a) - 2, nom, 5.8, 'helv', BLEU, rot=90)
     p.arc(*V.PORTE_SDB[:4], V.PORTE_SDB[4], BLEU); p.arc(*V.PORTE_NO[:4], V.PORTE_NO[4], (0.35,) * 3)
-    p.arc((2.405, 0.0), 0.81, 0, 90, 90, (0.35,) * 3); p.txt(X(3.05), Y(0.12), 'battant est fixe', 5.6, 'helv', BLEU)
+    p.arc((2.405, 0.0), 0.81, 0, 90, 90, (0.35,) * 3); p.txt(X(3.05), Y(0.32), 'battant est fixe', 5.6, 'helv', BLEU)
     p.rect(R(0.20, -0.15, 1.00, 0.15), None, BLEU, 1.1, '[3 2] 0'); p.txt(X(0.25), Y(0.30), 'fenêtre 100x125, allège 0.95', 5.8, 'helv', BLEU); p.txt(X(0.25), Y(0.30) + 7, 'bas fixe, haut à soufflet', 5.8, 'helv', BLEU)
     for m in (V.U_N, V.U_E, V.U_S):
         p.rect(R(*m[1:]), None, BLEU, 1.0)
@@ -206,7 +213,7 @@ def v_constructions(doc, src):
         else: p.line(P(m[1] + m[3] / 2, m[2] + 0.05), P(m[1] + m[3] / 2, m[2] + m[4] - 0.05), BLEU, 0.5, '[2 2] 0')
     p.txt(X(6.30), Y(5.18), 'penderie en U', 6.2, 'helv', BLEU)
     for m in (V.VASQUE, V.DOUCHE, V.WC): p.rect(R(*m[1:]), None, BLEU, 1.0)
-    p.txt(X(5.66), Y(0.12), 'double vasque', 6.0, 'helv', BLEU, rot=90); p.txt(X(7.32), Y(0.45), 'douche', 6.2, 'helv', BLEU)
+    p.txt(X(5.66), Y(0.12), 'double vasque', 6.0, 'helv', BLEU, rot=90); p.txt(X(7.45), Y(0.92), 'douche', 6.2, 'helv', BLEU); p.txt(X(7.12), Y(0.30), 'fenêtre 100x60 :', 5.6, 'helv', BLEU); p.txt(X(7.12), Y(0.30) + 6.2, 'soufflet haut dépoli', 5.6, 'helv', BLEU)
     p.etiquette(7.2, 1.30 + 0.1, 'SDB', (W - 6.10) * SDB_Y); p.etiquette(5.2, 3.95, 'DRESSING', 4.06 * (D - Y_TOP) + 1.74 * Y_TOP)
     cadre(p, None)
     bande(p, 14, 600, 'LÉGENDE', ['Cadre orange : zone des modifications (deux chambres miroirs du R+1).', 'Bleu hachuré : mur ou cloison à construire (épaisseur 0.15).', 'Contour bleu : menuiserie, appareil ou agencement neuf.', 'Gris : existant conservé.', 'Mobilier libre non figuré (voir le projet final).'], 100)
@@ -243,7 +250,7 @@ def v_final(doc, src):
     p.rect(R(4.06, 0.81, 0.15, 0.60), (0.5,) * 3, NOIR, 0.5); p.rect(R(7.22, D, 0.90, 0.15), GRIS, NOIR, 0.84)       # K1, porte NE fermée
     p.line(P(7.07, 1.00), P(W, 1.00), (0.2, 0.5, 0.9), 1.2)                                                           # paroi vitrée douche / WC
     p.arc(*V.PORTE_NO[:4], V.PORTE_NO[4]); p.arc(*V.PORTE_SDB[:4], V.PORTE_SDB[4])
-    p.arc((2.405, 0.0), 0.81, 0, 90, 90); p.txt(X(3.05), Y(0.12), 'battant fixe', 5.6, 'helv', (0.35,) * 3)           # baie ouest : battant ouest ouvrant, battant est fixe
+    p.arc((2.405, 0.0), 0.81, 0, 90, 90); p.txt(X(3.05), Y(0.32), 'battant fixe', 5.6, 'helv', (0.35,) * 3)           # baie ouest : battant ouest ouvrant, battant est fixe
     for m, k in ((V.LIT, 'lit'), (V.CHEV_S, 'rect'), (V.CHEV_N, 'rect'), (V.FAUT, 'faut'), (V.GUER, 'rond'), (V.COMM, 'rect'), (V.TV, 'tv'), (V.U_N, 'pend'), (V.U_E, 'pend'), (V.U_S, 'pend'), (V.VASQUE, 'vasque2'), (V.DOUCHE, 'douche'), (V.WC, 'wc')): meuble(p, m, k)
     p.txt(X(6.55), Y(5.35), 'penderie', 6.2, 'helv', (0.35,) * 3)
     p.etiquette(2.15, 4.35, 'CHAMBRE', 4.06 * D); p.etiquette(5.2, 3.95, 'DRESSING', 4.06 * (D - Y_TOP) + 1.74 * Y_TOP); p.etiquette(7.0, 1.55, 'SDB', (W - 6.10) * SDB_Y)

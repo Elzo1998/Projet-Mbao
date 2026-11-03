@@ -65,10 +65,11 @@
    "id": "C-007",
    "date": "2026-11-03",
    "texte": "Version E (retours du client sur le PDF D) : (1) dressing limité à la ligne rouge : penderie nord raccourcie, côté ouest libre ; (2) DEUX ouvertures de la taille d'une porte (hauteur 2.20) dans le mur chambre/dressing, une côté intérieur (nord), une côté façade (sud) : plus de porte coulissante ; (3) supprimer le meuble de rangement ; créer à la place une DOUBLE vasque du côté du mur de la salle de bain ; (4) salle de bain : plus de vasque, seulement WC et douche ; (5) lit entre les deux ouvertures, TV en face, mobilier autour proposé ; (6) fenêtre de la chambre (ancienne fenêtre du WC ouest, 1.00) : 1.00 de large sur toute la hauteur, battante en deux parties : bas fixe, haut ouvrant vers l'avant ; (7) fenêtre 1.60 du dressing : allège à la hauteur de la vasque, pleine hauteur jusqu'au linteau ; (8) tout vérifié (règles de l'art, vérificateur) AVANT de proposer ; image d'abord, PDF après validation.",
-   "statut": "a_faire",
-   "preuve": "",
+   "statut": "verifie",
+   "preuve": "version E : 37 controles chiffres a 0 ecart (suite_parentale_r1_v5.py), 2 passages du verificateur (2e : contenu LIVRABLE), corrections des mineurs faites ; PNG envoye ; PDF E dans le depot, envoi apres validation du client",
    "source": "msg 03/11 (MBAO, version E)",
-   "moment": "APERCU"
+   "moment": "APERCU",
+   "maj": "2026-11-03 00:17"
   }
  ]
 }
