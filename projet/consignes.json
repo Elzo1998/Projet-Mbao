@@ -6,10 +6,10 @@
    "date": "2026-11-02",
    "texte": "R+1 : fusionner les deux chambres miroirs de façade en UNE suite parentale (chambre spacieuse, grande salle de bain, walk-in dressing avec îlot central, circulations confortables), avec le MOINS de modifications possible (poteaux-poutres inchangés, cloisons décloisonnables). Proposition 2D libre, règles de l'atelier appliquées.",
    "statut": "en_cours",
-   "preuve": "PDF livre, validation client attendue",
+   "preuve": "version E en cours (C-007)",
    "source": "msg 02/11 (MBAO)",
    "moment": "APERCU",
-   "maj": "2026-11-02 22:00"
+   "maj": "2026-11-03 00:04"
   },
   {
    "id": "C-002",
@@ -55,11 +55,20 @@
    "id": "C-006",
    "date": "2026-11-02",
    "texte": "Après accord d'ensemble sur la version D : (1) faire vérifier par l'agent vérificateur ; (2) produire UN PDF de trois versions : démolitions, constructions, projet final ; (3) reprendre la charte graphique du plan R+1 d'origine (PDF V2 page 15) et reproduire TOUT le niveau R+1 avec un cadre ORANGE sur la zone des deux chambres, modifications affichées dans cette zone pour que n'importe qui comprenne où est la modification.",
-   "statut": "fait",
-   "preuve": "projet/esquisse/MBAO_R1_Suite_parentale_D.pdf, 2 passages verificateur : LIVRABLE sans bloquant ; attente validation client",
+   "statut": "verifie",
+   "preuve": "PDF D envoyé (commit e8a8bcd) ; le client demande la version E",
    "source": "msg 02/11 (MBAO, PDF)",
    "moment": "APERCU",
-   "maj": "2026-11-02 22:00"
+   "maj": "2026-11-03 00:04"
+  },
+  {
+   "id": "C-007",
+   "date": "2026-11-03",
+   "texte": "Version E (retours du client sur le PDF D) : (1) dressing limité à la ligne rouge : penderie nord raccourcie, côté ouest libre ; (2) DEUX ouvertures de la taille d'une porte (hauteur 2.20) dans le mur chambre/dressing, une côté intérieur (nord), une côté façade (sud) : plus de porte coulissante ; (3) supprimer le meuble de rangement ; créer à la place une DOUBLE vasque du côté du mur de la salle de bain ; (4) salle de bain : plus de vasque, seulement WC et douche ; (5) lit entre les deux ouvertures, TV en face, mobilier autour proposé ; (6) fenêtre de la chambre (ancienne fenêtre du WC ouest, 1.00) : 1.00 de large sur toute la hauteur, battante en deux parties : bas fixe, haut ouvrant vers l'avant ; (7) fenêtre 1.60 du dressing : allège à la hauteur de la vasque, pleine hauteur jusqu'au linteau ; (8) tout vérifié (règles de l'art, vérificateur) AVANT de proposer ; image d'abord, PDF après validation.",
+   "statut": "a_faire",
+   "preuve": "",
+   "source": "msg 03/11 (MBAO, version E)",
+   "moment": "APERCU"
   }
  ]
 }
