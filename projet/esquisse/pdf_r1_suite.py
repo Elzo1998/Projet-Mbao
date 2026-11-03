@@ -85,7 +85,7 @@ class Pg:
         self.poly(pts, color, 0.6 if ymin is not None else 0.48)
         d0 = P(*ch); d1 = P(ch[0] + r * math.cos(math.radians(ouvert)), ch[1] + r * math.sin(math.radians(ouvert)))
         if ymin is not None: d0 = pymupdf.Point(d0.x, max(d0.y, ymin))
-        self.line(d0, d1, color, 0.84)
+        self.line(d0, d1, color, 0.6 if ymin is not None else 0.84)       # porte de la source : vantail et arc à 0.6
 
     def cote(self, a, b, texte, decal=0.0, vertical=False, size=9):
         """Cote dans la charte du plan : trait fin, traits obliques aux extrémités, texte italique sur fond blanc."""
@@ -181,7 +181,7 @@ def rects_orphelins():
                 c = ((a.x + b.x) / 2, (a.y + b.y) / 2)
                 if any(z[0] <= c[0] <= z[2] and z[1] <= c[1] <= z[3] for z in BANDES_MURS):
                     out.append(pymupdf.Rect(r.x0 - 1.0, r.y0 - 1.0, r.x1 + 1.0, r.y1 + 1.0)); break      # marge >= demi-trait : PyMuPDF compare la boîte avec l'épaisseur du trait
-    return out
+    return out + CR.cotes_perimees(SRC, 14, BANDES_TOUS, (193, 583, 657, 897))
 
 
 def traits_face(p):
@@ -253,6 +253,7 @@ def v_constructions(doc, src):
     for (a, b), nom in ((V.OUV_S, 'ouv. 80x220'), (V.OUV_N, 'ouv. 90x220')):
         p.rect(clip_int(R(XC, a, 0.15, b - a)), None, BLEU, 0.6, '[3 2] 0'); p.txt(X(4.36), Y(a) - 2, nom, 5.8, 'helv', BLEU, rot=90)
     p.arc(*V.PORTE_SDB[:4], V.PORTE_SDB[4], BLEU); p.arc(*V.PORTE_NO[:4], V.PORTE_NO[4], ymin=580.0)
+    p.rect(R(XE_M, SDB_Y - 0.052, 0.80, 0.034), None, BLEU, 0.48)
     p.rect(R(0.20, -0.15, 1.00, 0.15), None, BLEU, 1.1, '[3 2] 0'); p.txt(X(0.25), Y(0.30), 'fenêtre 100x125, allège 0.95', 5.8, 'helv', BLEU); p.txt(X(0.25), Y(0.30) + 7, 'bas fixe, haut à soufflet', 5.8, 'helv', BLEU)
     for m in (V.U_N, V.U_E, V.U_S):
         p.rect(clip_int(R(*m[1:])), None, BLEU, 0.6)
@@ -302,10 +303,11 @@ def v_final(doc, src):
     p.mur((XC, V.OUV_S[1], 0.15, V.OUV_N[0] - V.OUV_S[1]), 'ex'); p.mur((XM, 0, 0.15, 1.58), 'ex')                      # cloison centrale ; mur ouest de la salle de bain (une seule pièce, sans joint apparent)
     p.mur((XM, SDB_Y, W - XM, 0.15), 'ex')                                                                                # mur nord de la salle de bain d'un seul tenant
     p.rect(R(XC, 1.027, 0.15, 0.15), (0.5,) * 3, NOIR, 0.5); fermer_porte_ne(p)                                      # K1 (marque du plan source), porte NE fermée dans le prolongement exact du mur nord
-    p.line(P(7.07, 1.00), P(W, 1.00), (0.2, 0.5, 0.9), 1.2)                                                           # paroi vitrée douche / WC
+    for dy in (0.0, 1.0): p.line(pymupdf.Point(X(7.07), Y(1.00) + dy), pymupdf.Point(X(W) - 0.7, Y(1.00) + dy), NOIR, 0.5)   # paroi vitrée douche / WC : double trait fin, en noir comme le reste de la page
     p.arc(*V.PORTE_NO[:4], V.PORTE_NO[4], ymin=580.0); p.arc(*V.PORTE_SDB[:4], V.PORTE_SDB[4])
+    p.rect(R(XE_M, SDB_Y - 0.052, 0.80, 0.034), (1, 1, 1), NOIR, 0.48)                                             # vantail de la salle de bain ouvert à plat contre le mur nord (épaisseur 0.034)
     for m, k in ((V.LIT, 'lit'), (V.CHEV_S, 'rect'), (V.CHEV_N, 'rect'), (V.FAUT, 'faut'), (V.GUER, 'rond'), (V.COMM, 'rect'), (V.TV, 'tv'), (V.U_N, 'pend'), (V.U_E, 'pend'), (V.U_S, 'pend'), (V.VASQUE, 'vasque2'), (V.DOUCHE, 'douche'), (V.WC, 'wc')): meuble(p, m, k)
-    p.txt(X(6.55), Y(5.35), 'penderie', 6.2, 'helv', (0.35,) * 3)
+    p.txt(X(6.55), Y(5.46), 'penderie', 6.2, 'helv', (0.35,) * 3)
     p.etiquette(2.15, 4.35, 'CHAMBRE', S_CH); p.etiquette(5.2, 3.95, 'DRESSING', S_DR); p.etiquette(7.0, 1.55, 'SDB', S_SDB)
     cadre(p, None)
     bande(p, 14, 600, 'LÉGENDE', ['Cadre orange : zone des modifications (deux chambres miroirs du R+1 transformées en une suite parentale).', 'Parcours : chambre, dressing, salle de bain ; on entre et on sort du dressing par deux ouvertures de porte (0.80 côté façade, 0.90 côté nord).', 'Lumière et air naturels : fenêtre 160x125 pour le dressing, fenêtre 100x125 pour la chambre (bas fixe, haut à soufflet), fenêtre 100x60 à soufflet haut dépoli pour la salle de bain, au-dessus de la douche.'], 100)
@@ -353,7 +355,8 @@ def murs_source_tous():
 
 # zones où le dessin a le DROIT de différer de la source (points) : intérieur de la zone, chaînes refaites, ouvertures modifiées, cadre orange, légendes, cartouche
 ZONES_ERASE = [(191.0, 580.25, 659.0, 898.4), (142, 586, 181.5, 892.5), (669, 586, 704, 892.5), (315, 897.5, 335, 912), (541, 897.5, 561, 912)]
-BANDES_MURS = [(182, 585, 193, 893), (657, 585, 668, 893)]                                  # bandes des murs ouest et est : plus aucun tick de cote orphelin
+BANDES_MURS = [(182, 585, 193, 893), (657, 585, 668, 893)]
+BANDES_TOUS = BANDES_MURS + [(190, 568, 668, 583), (190, 897, 660, 909)]                    # + bande du mur nord et bande de façade                                  # bandes des murs ouest et est : plus aucun tick de cote orphelin
 ZONES_OK = ZONES_ERASE + [(r.x0, r.y0, r.x1, r.y1) for r in rects_orphelins()] + [(186, 784, 196, 798), (653, 784, 665, 798), (418, 896.5, 432, 901), (258, 577.5, 268, 582), (418, 577.5, 432, 582), (581, 577.5, 592, 582), (596, 569, 658, 583),
                           (X(0.20) - 2, 897, X(1.20) + 2, 909), (141, 575, 183, 900), (668, 575, 705, 900),
                           (431.4, 899.4, 522.9, 906.6), (R(NE0, D, NE1 - NE0, 0.15).x0 - 2, 569.5, R(NE0, D, NE1 - NE0, 0.15).x1 + 2, 581.5),
@@ -371,6 +374,7 @@ def controler_raccords(chemin):
     for page in (1, 2):
         for c in CR.continuite_traits(chemin, page, faces): err.append('PAGE %d : trait de face coupé (%s) de %.1f à %.1f pt' % ((page + 1,) + c))
         for c in CR.traits_parasites(chemin, page, BANDES_MURS): err.append('PAGE %d : tick de cote orphelin en %s' % (page + 1, c))
+        for c in CR.cotes_perimees(chemin, page, BANDES_TOUS, (193, 583, 657, 897)): err.append('PAGE %d : ancienne cote encore visible dans un mur, boîte (pt) %s' % (page + 1, tuple(round(v, 1) for v in c)))
     return err
 
 

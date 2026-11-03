@@ -6,10 +6,10 @@
    "date": "2026-11-02",
    "texte": "R+1 : fusionner les deux chambres miroirs de façade en UNE suite parentale (chambre spacieuse, grande salle de bain, walk-in dressing avec îlot central, circulations confortables), avec le MOINS de modifications possible (poteaux-poutres inchangés, cloisons décloisonnables). Proposition 2D libre, règles de l'atelier appliquées.",
    "statut": "en_cours",
-   "preuve": "version E en cours (C-007)",
+   "preuve": "ilot abandonne sur decision du client (02/11) ; version E ; validation finale du client attendue",
    "source": "msg 02/11 (MBAO)",
    "moment": "APERCU",
-   "maj": "2026-11-03 00:04"
+   "maj": "2026-11-03 13:16"
   },
   {
    "id": "C-002",
@@ -85,19 +85,21 @@
    "id": "C-009",
    "date": "2026-11-03",
    "texte": "Raccords : (1) la fermeture de la porte NE est plus épaisse / décalée par rapport au mur nord d'origine : corriger ; il y a d'autres erreurs de raccordement non encore signalées : toutes les chercher et les corriger ; (2) créer une règle / un contrôle qui vérifie TOUS les raccordements de murs et d'éléments AVANT toute livraison, dans les règles de vérification de l'atelier ; le client ne veut plus avoir à le redire.",
-   "statut": "a_faire",
-   "preuve": "",
+   "statut": "verifie",
+   "preuve": "raccords : cotes d'existant mesurees sur le vectoriel, outil controle_raccords.py (murs, fidelite, texte perime, continuite des traits, cotes perimees) a 0 anomalie, 4 passages du verificateur",
    "source": "msg 03/11 (MBAO, raccords)",
-   "moment": "APERCU"
+   "moment": "APERCU",
+   "maj": "2026-11-03 13:16"
   },
   {
    "id": "C-010",
    "date": "2026-11-03",
    "texte": "Livrer la DERNIÈRE VERSION FINALE (PDF 3 pages) avec TOUS les contrôles passés, destinée à être remise au client ; avant livraison : corriger tous les défauts de raccord relevés par le vérificateur (traits de mur coupés, coutures de la fermeture NE, jambage de la salle de bain à 2.38, ticks de cotes orphelins, arc de la porte NO relevé, traits bleus de la page 2).",
-   "statut": "a_faire",
-   "preuve": "",
+   "statut": "verifie",
+   "preuve": "7 defauts de raccord du verificateur corriges (traits de face, fermeture NE, jambage SDB 2.38, ticks et cotes perimees supprimes, arc NO releve, traits bleus) ; controle automatique CONFORME",
    "source": "msg 03/11 (MBAO, version finale)",
-   "moment": "APERCU"
+   "moment": "APERCU",
+   "maj": "2026-11-03 13:16"
   }
  ]
 }
