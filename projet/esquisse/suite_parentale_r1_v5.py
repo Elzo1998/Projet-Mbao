@@ -14,7 +14,8 @@ import suite_parentale_r1 as B
 
 W, D = B.W, B.D
 SDB_Y, Y_TOP = 2.38, 2.53                               # profondeur intérieure de la salle de bain (1.83 + 0.55) ; dessus de son mur nord
-OUV_S, OUV_N = (0.0, 0.80), (4.75, D)                   # ouvertures dans la cloison centrale (y) : côté façade et côté nord
+XM, XE_M = 5.945, 6.095                                 # faces ouest et est du mur ouest de la salle de bain (existant : 5.945 à 6.095, relevé sur le plan source)
+OUV_S, OUV_N = (0.0, 0.80), (D - 0.90, D)                   # ouvertures dans la cloison centrale (y) : côté façade et côté nord
 LINTEAU, ALLEGE = 2.20, 0.95                            # linteau commun ; allège standard (fenêtre 1.25 de haut)
 SOUS_FACE_C4 = 2.80                                     # sous-face de la poutre C4 (15x60) au-dessus de l'ouverture sud (coffrage p.5)
 POUTRE_B14 = 2.75                                       # sous-face de la poutre B14 (15x65) au-dessus de la cloison, depuis le sol fini (coffrage p.5)
@@ -26,17 +27,17 @@ CHEV_S, CHEV_N = ('Chevet', 3.66, YC - 0.93 - 0.40, 0.40, 0.40), ('Chevet', 3.66
 TV = ('Meuble TV 1.40', 0.0, YC - 0.70, 0.40, 1.40)
 FAUT = ('Fauteuil', 0.35, 0.25, 0.80, 0.80)
 GUER = ('Guéridon', 1.25, 0.42, 0.45, 0.45)
-COMM = ('Commode 1.20', 1.60, 5.20, 1.20, 0.45)
+COMM = ('Commode 1.20', 1.60, D - 0.45, 1.20, 0.45)
 # ---- dressing : penderie en U limitée à la ligne rouge (nord à partir de x 6.10), hall libre côté cloison centrale
-U_N = ('Penderie U (nord)', 6.10, D - 0.60, W - 6.10, 0.60)
+U_N = ('Penderie U (nord)', XE_M, D - 0.60, W - XE_M, 0.60)
 U_E = ('Penderie U (est)', W - 0.60, Y_TOP, 0.60, D - 0.60 - Y_TOP)
-U_S = ('Penderie U (sud)', 6.10, Y_TOP, W - 0.60 - 6.10, 0.60)
-VASQUE = ('Double vasque 1.40', 5.45, 0.05, 0.50, 1.40)      # contre le mur ouest de la salle de bain, façade côté fenêtre
+U_S = ('Penderie U (sud)', XE_M, Y_TOP, W - 0.60 - XE_M, 0.60)
+VASQUE = ('Double vasque 1.40', XM - 0.50, 0.05, 0.50, 1.40)      # contre le mur ouest de la salle de bain, façade côté fenêtre
 # ---- salle de bain 2.17 x 2.38 : douche SE sous la fenêtre existante, WC suspendu mur est (plus de vasque)
 DOUCHE = ('Douche 1.20 x 1.00', 7.07, 0.0, 1.20, 1.00)
 WC = ('WC susp.', 7.72, 1.52, 0.55, 0.36)
-PORTE_SDB = ((6.09, 2.35), 0.80, 270, 360, 0)           # porte 1.55-2.35 du mur ouest, charnière au nord : vantail ouvert à plat contre le mur nord
-PORTE_NO = ((0.15, D), 0.90, 270, 360, 270)             # porte d'entrée de la suite (existante) : vantail contre le mur ouest
+PORTE_SDB = ((XE_M, 2.35), 0.80, 270, 360, 0)           # porte 1.55-2.35 du mur ouest, charnière au nord : vantail ouvert à plat contre le mur nord
+PORTE_NO = ((0.122, D), 0.889, 270, 360, 270)             # porte d'entrée de la suite (existante) : vantail contre le mur ouest
 # ---- fenêtres de façade (x0, x1, allège, hauteur)
 FEN_CH = (0.20, 1.20, ALLEGE, 1.25)                     # chambre : 1.00, bas fixe 0.95-1.60, haut à soufflet 1.60-2.20 (ancienne fenêtre de WC)
 FEN_DR = (4.25, 5.85, ALLEGE, 1.25)                     # dressing : 1.60 x 1.25
@@ -79,8 +80,8 @@ def controles():
     t('CIR-002', 'Fauteuil / guéridon et lit : passage', R(FAUT).distance(lit), 0.70)
     # --- dressing
     t('CIR-013', 'Dressing : allée entre penderie nord et penderie sud', pn.distance(ps), 0.90)
-    t('CIR-013', 'Dressing : allée devant la penderie est (jusqu\'au bord ouest du U)', U_E[1] - 6.10, 0.90)
-    t('CIR-019', 'Double vasque : libre devant >= 0.70 (côté cloison centrale)', 5.45 - 4.21, 0.70)
+    t('CIR-013', 'Dressing : allée devant la penderie est (jusqu\'au bord ouest du U)', U_E[1] - XE_M, 0.90)
+    t('CIR-019', 'Double vasque : libre devant >= 0.70 (côté cloison centrale)', (XM - 0.50) - 4.209, 0.70)
     t('CIR-020', 'Porte SDB : approche libre côté dressing (0.80) devant la porte', vq.distance(box(5.15, 1.55, 5.95, 2.35)), 0.0)
     # --- salle de bain
     t('SDE-005', 'Douche italienne >= 1.20 x 0.90 (1.20 x 1.00)', min(DOUCHE[3], 1.20 * DOUCHE[4] / DOUCHE[4]), 1.20)

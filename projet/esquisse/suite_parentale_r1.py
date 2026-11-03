@@ -15,7 +15,7 @@ from shapely.geometry import box
 HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.dirname(os.path.dirname(HERE))
 sys.path.insert(0, '/home/user/atelier-archi-ingenierie/outils'); import identite
 ID = identite.depuis_projet(ROOT)
-W, D = 8.27, 5.65                      # intérieur total de la zone (largeur x profondeur)
+W, D = 8.269, 5.626                    # intérieur total de la zone, MESURÉ sur le vectoriel du plan source (page 15, 1:50), pas lu à l'oeil
 GRIS, NOIR, ROUGE, BLEU = '#b8b8b8', '#111111', '#d02020', '#1a50b0'
 
 # ---- éléments conservés (structure : BAEL, plan de coffrage D&F) -----------------------------------------------------
@@ -24,13 +24,13 @@ POTEAUX = {'K2 B-1': (-0.15, 0.91, 0.15, 0.40), 'K1 B-2 (15/60)': (4.06, 0.81, 0
 MURS_EXT = [(-0.15, -0.15, 0.15, 5.95), (W, -0.15, 0.15, 5.95), (-0.15, -0.15, W + 0.30, 0.15), (-0.15, D, W + 0.30, 0.15)]
 BAIES = [(2.405, 4.025), (4.245, 5.865)]            # portes-fenêtres de façade 1.62 (inchangées)
 FEN_TOIL = [(0.20, 1.20), (7.07, 8.07)]             # fenêtres 1.00 des anciens WC (inchangées)
-PORTE_NO, PORTE_NE = (0.15, 1.05), (7.22, 8.12)     # portes d'entrée depuis le dégagement
+PORTE_NO, PORTE_NE = (0.095, 1.041), (7.23, 8.176)   # portes d'entrée depuis le dégagement : montants relevés dans la bande du mur nord
 MUR_CENTRAL = (4.06, 0.0, 0.15, D)                  # cloison sur poutre A14, sous la poutre B14 15x65 (conservée)
-STUB_O, STUB_E = (1.26, 5.03, 0.12, 0.62), (6.89, 5.03, 0.12, 0.62)
-PLACARD_O, PLACARD_E = (1.38, 5.02, 2.68, 0.63), (4.21, 5.02, 2.68, 0.63)
+STUB_O, STUB_E = (1.235, 5.002, 0.100, 0.624), (6.936, 5.002, 0.100, 0.624)
+PLACARD_O, PLACARD_E = (1.335, 5.002, 2.724, 0.624), (4.209, 5.002, 2.727, 0.624)
 
 # ---- état existant : cloisons des deux WC ---------------------------------------------------------------------------
-CLOIS_EXISTANT = [(0, 1.83, 2.32, 0.15), (2.18, 0, 0.14, 1.98), (W - 2.32, 1.83, 2.32, 0.15), (W - 2.32, 0, 0.14, 1.98)]
+CLOIS_EXISTANT = [(0, 1.827, 2.326, 0.148), (2.175, 0, 0.151, 1.975), (6.095, 1.827, W - 6.095, 0.148), (5.945, 0, 0.150, 1.975)]   # cotes relevées sur le plan source
 # ---- proposition ---------------------------------------------------------------------------------------------------
 DEMOL = list(CLOIS_EXISTANT)                                   # les 4 cloisons des WC (ouest et est) sont démolies
 NEUF = [(4.21, 2.50, W - 4.21, 0.15),                          # cloison salle de bain / dressing

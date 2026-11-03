@@ -80,6 +80,15 @@
    "source": "msg 03/11 (MBAO, retours E)",
    "moment": "APERCU",
    "maj": "2026-11-03 12:17"
+  },
+  {
+   "id": "C-009",
+   "date": "2026-11-03",
+   "texte": "Raccords : (1) la fermeture de la porte NE est plus épaisse / décalée par rapport au mur nord d'origine : corriger ; il y a d'autres erreurs de raccordement non encore signalées : toutes les chercher et les corriger ; (2) créer une règle / un contrôle qui vérifie TOUS les raccordements de murs et d'éléments AVANT toute livraison, dans les règles de vérification de l'atelier ; le client ne veut plus avoir à le redire.",
+   "statut": "a_faire",
+   "preuve": "",
+   "source": "msg 03/11 (MBAO, raccords)",
+   "moment": "APERCU"
   }
  ]
 }

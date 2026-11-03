@@ -21,6 +21,11 @@ W, D = B.W, B.D
 GRIS, NOIR, BLEU_T, ORANGE, ROUGE, BLEU = (0.75,) * 3, (0, 0, 0), (0, 0, 0.627), (1.0, 0.55, 0.0), (0.85, 0.1, 0.1), (0.1, 0.3, 0.8)
 BLEU_C = (0.80, 0.88, 1.0)
 SDB_Y, Y_TOP = V.SDB_Y, V.Y_TOP
+XM, XE_M = V.XM, V.XE_M                                  # faces du mur ouest de la salle de bain (existant, relevé sur le plan source)
+XC = 4.059                                               # face ouest de la cloison centrale (relevé)
+NE0, NE1 = B.PORTE_NE                                    # montants de la porte NE dans la bande du mur nord (relevé)
+S_CH = (XC * D); S_DR = (W - 4.209) * (D - Y_TOP) + (XM - 4.209) * Y_TOP; S_SDB = (W - XE_M) * SDB_Y
+sys.path.insert(0, '/home/user/atelier-archi-ingenierie/outils'); import controle_raccords as CR
 DATE = '03/11/26'
 
 
@@ -116,6 +121,7 @@ def bande(p, x, y, titre, lignes, larg):
     """Colonne de texte dans la marge de la page (légende ou notes)."""
     p.txt(x, y, titre, 8, 'hebo'); y += 11
     for l in lignes:
+        l = l.replace('{CH}', '%.2f' % S_CH).replace('{DR}', '%.2f' % S_DR).replace('{SDB}', '%.2f' % S_SDB)
         for sous in wrap(l, larg, 6.4):
             p.txt(x, y, sous, 6.4); y += 7.9
         y += 3
@@ -131,10 +137,10 @@ def wrap(t, larg, size):
 
 
 def vider_zone(p):
-    p.effacer([pymupdf.Rect(191.0, 580.6, 659.0, 898.4), pymupdf.Rect(142, 566, 181.5, 899), pymupdf.Rect(669, 566, 704, 899), pymupdf.Rect(315, 897.5, 335, 912), pymupdf.Rect(541, 897.5, 561, 912)])
+    p.effacer([pymupdf.Rect(191.0, 580.6, 659.0, 898.4), pymupdf.Rect(142, 586, 181.5, 892.5), pymupdf.Rect(669, 586, 704, 892.5), pymupdf.Rect(315, 897.5, 335, 912), pymupdf.Rect(541, 897.5, 561, 912)])
     """Efface l'intérieur de la zone (cloisons, mobilier, textes, cotes de chaîne) ; murs extérieurs, balcon et chaînes du bas restent."""
     p.blanc(pymupdf.Rect(191.0, 580.6, 659.0, 898.4))
-    p.blanc(pymupdf.Rect(142, 566, 181.5, 899)); p.blanc(pymupdf.Rect(669, 566, 704, 899))
+    p.blanc(pymupdf.Rect(142, 586, 181.5, 892.5)); p.blanc(pymupdf.Rect(669, 586, 704, 892.5))
     p.line(pymupdf.Point(313.92, 898.8), pymupdf.Point(322.44, 898.8), NOIR, 0.84)                               # trait de la face intérieure de la façade, coupé par l'ancienne cloison du WC ouest
     p.blanc(pymupdf.Rect(431.4, 899.4, 522.9, 906.6))                               # symbole de la baie est : l'ouverture seulement, murs et piliers de façade intacts
 
@@ -145,22 +151,19 @@ def retirer_ss(p):
 
 
 def chaines(p):
-    """Chaînes verticales gauche et droite refaites (le mur à 1.83 a disparu côté ouest ; salle de bain 2.38 côté est)."""
-    for xl, xt, droite in ((173.5, 152.0, False), (695.0, 683.0, True)):
-        ys = [(5.65 + 0.15, 5.65, '0.15'), (5.65, 0.0, None), (0.0, -0.15, '0.15')]
-        seg = [('0.15', D + 0.15, D)]
-        if not droite: seg += [('%.2f' % D, D, 0.0)]
-        else: seg += [('%.2f' % (D - Y_TOP), D, Y_TOP), ('0.15', Y_TOP, SDB_Y), ('%.2f' % SDB_Y, SDB_Y, 0.0)]
-        seg += [('0.15', 0.0, -0.15)]
-        for t, a, b in seg:
-            p.line(pymupdf.Point(xl, Y(a)), pymupdf.Point(xl, Y(b)), NOIR, 0.48)
-            for yy in (a, b): p.line(pymupdf.Point(xl - 3, Y(yy) + 3), pymupdf.Point(xl + 3, Y(yy) - 3), NOIR, 0.7)
-            mid = (Y(a) + Y(b)) / 2; tl = pymupdf.get_text_length(t, 'heit', 10.6)
-            p.blanc(pymupdf.Rect(xt - 7, mid - tl / 2 - 1, xt + 6, mid + tl / 2 + 1)); p.txt(xt + 4, mid + tl / 2, t, 10.6, 'heit', rot=90)
-        # prolongements des murs jusqu'à la chaîne
-        for yy in sorted({a for _, a, _ in seg} | {b for _, _, b in seg}):
-            xw = 182.0 if not droite else 667.9
-            p.line(pymupdf.Point(xl + (0 if not droite else 0), Y(yy)), pymupdf.Point(xw - (2 if not droite else -2), Y(yy)), NOIR, 0.48)
+    """Chaînes verticales gauche et droite : même ligne que la source (x 158.28 et 688.44, trait 0.84). Seuls les segments du milieu sont refaits ;
+    les segments de l'épaisseur du mur nord et de la façade et leurs traits obliques restent ceux de la source."""
+    for xl, xt, droite in ((158.28, 152.0, False), (688.44, 682.0, True)):
+        seg = [('%.2f' % D, D, 0.0)] if not droite else [('%.2f' % (D - Y_TOP), D, Y_TOP), ('0.15', Y_TOP, SDB_Y), ('%.2f' % SDB_Y, SDB_Y, 0.0)]
+        xw = 182.0 if not droite else 667.9
+        for t_, a, b in seg:
+            p.line(pymupdf.Point(xl, Y(a)), pymupdf.Point(xl, Y(b)), NOIR, 0.84)
+            for yy in (a, b):
+                if abs(yy - D) < 1e-9 or abs(yy) < 1e-9: continue                  # traits aux extrémités : ceux de la source
+                p.line(pymupdf.Point(xl - 3, Y(yy) + 3), pymupdf.Point(xl + 3, Y(yy) - 3), NOIR, 0.7)
+                p.line(pymupdf.Point(xl, Y(yy)), pymupdf.Point(xw - (2 if not droite else -2), Y(yy)), NOIR, 0.48)
+            mid = (Y(a) + Y(b)) / 2; tl = pymupdf.get_text_length(t_, 'heit', 10.6)
+            p.blanc(pymupdf.Rect(xt - 7, mid - tl / 2 - 1, xt + 6, mid + tl / 2 + 1)); p.txt(xt + 4, mid + tl / 2, t_, 10.6, 'heit', rot=90)
 
 
 def fenetre_est(p, final):
@@ -176,15 +179,15 @@ def v_demolitions(doc, src):
     p = Pg(doc, src); cartouche(p, 'R+1 - DEMOLITIONS', '016'); cadre(p, None)
     for xa, xb in ((2.405, 4.025), (4.245, 5.865)): p.blanc(pymupdf.Rect(X(xa) + 1.2, Y(0.86), X(xb) - 1.2, Y(0.035)))      # portes-fenêtres coulissantes : pas d'arc d'ouverture en plan
     for c in (B.CLOIS_EXISTANT[0], B.CLOIS_EXISTANT[1], B.CLOIS_EXISTANT[2]): p.mur(c, 'demol')               # WC ouest (2 murs), mur nord du WC est
-    p.mur((5.95, 1.84, 0.14, 0.14), 'demol')                                                                  # retour du mur ouest du WC est
-    p.mur((4.06, V.OUV_S[0], 0.15, V.OUV_S[1] - V.OUV_S[0]), 'demol')                                         # ouverture côté façade (cloison centrale)
-    p.mur((4.06, V.OUV_N[0], 0.15, V.OUV_N[1] - V.OUV_N[0]), 'demol')                                         # ouverture côté nord
+    p.mur((XM, 1.84, 0.15, 1.975 - 1.84), 'demol')                                                                  # retour du mur ouest du WC est
+    p.mur((XC, V.OUV_S[0], 0.15, V.OUV_S[1] - V.OUV_S[0]), 'demol')                                         # ouverture côté façade (cloison centrale)
+    p.mur((XC, V.OUV_N[0], 0.15, V.OUV_N[1] - V.OUV_N[0]), 'demol')                                         # ouverture côté nord
     p.mur(B.STUB_O, 'demol'); p.mur(B.STUB_E, 'demol')                                                        # petits murs de l'ancien dressing
     for r in (R(*B.PLACARD_O), R(*B.PLACARD_E)): p.rect(r, None, ROUGE, 1.0, '[3 2] 0')                      # placards coulissants
     p.txt(X(1.75), Y(5.30), 'placard à déposer', 6.8, 'helv', ROUGE); p.txt(X(4.95), Y(5.30), 'placard à déposer', 6.8, 'helv', ROUGE)
     for r in ((0.0, 0.6, 0.6, 0.85), (1.50, 0.0, 0.70, 0.55), (7.65, 0.6, 0.62, 0.85), (6.1, 0.0, 0.70, 0.55)): p.rect(R(*r), None, ROUGE, 1.0, '[3 2] 0')   # sanitaires
     p.txt(X(0.10), Y(2.35), 'appareils sanitaires', 6.2, 'helv', ROUGE); p.txt(X(0.10), Y(2.35) + 7, 'à déposer', 6.2, 'helv', ROUGE)
-    for r in ((2.18, 0.98, 0.14, 0.86), (5.95, 0.98, 0.14, 0.86), (7.22, 5.65, 0.90, 0.15), (4.245, -0.15, 1.62, 0.15), (0.20, -0.15, 1.00, 0.15)): p.rect(R(*r), None, ROUGE, 1.1, '[3 2] 0')   # portes des WC, porte NE, baie est, fenêtre du WC ouest
+    for r in ((2.175, 0.98, 0.151, 0.86), (XM, 0.98, 0.15, 0.86), (NE0, D, NE1 - NE0, 0.15), (4.245, -0.15, 1.62, 0.15), (0.20, -0.15, 1.00, 0.15)): p.rect(R(*r), None, ROUGE, 1.1, '[3 2] 0')   # portes des WC, porte NE, baie est, fenêtre du WC ouest
     p.txt(X(7.20), Y(4.62), 'porte NE à déposer', 6.2, 'helv', ROUGE)
     p.txt(X(4.32), Y(0.45), 'baie est à déposer', 6.4, 'helv', ROUGE)
     p.txt(X(0.68), Y(0.32), 'allège à démolir', 5.6, 'helv', ROUGE); p.txt(X(0.68), Y(0.32) + 6.5, '(1.60 à 0.95)', 5.6, 'helv', ROUGE)
@@ -196,24 +199,23 @@ def v_demolitions(doc, src):
 # ---------------------------------------------------------------------------------------------------- version 2 : constructions
 def v_constructions(doc, src):
     p = Pg(doc, src); cartouche(p, 'R+1 - CONSTRUCTIONS', '017'); vider_zone(p); retirer_ss(p); chaines(p); fenetre_est(p, False)
-    for m in ((4.06, V.OUV_S[1], 0.15, V.OUV_N[0] - V.OUV_S[1]), (5.95, 0, 0.14, 0.98)): p.mur(m, 'ex')
-    p.rect(R(4.06, 0.81, 0.15, 0.60), (0.5,) * 3, NOIR, 0.5)                                                 # poteau K1 15/60 conservé
-    for m in ((5.95, 0.98, 0.15, 0.57), (5.95, 2.35, 0.15, Y_TOP - 2.35), (5.95, SDB_Y, W - 5.95, 0.15)): p.mur(m, 'neuf')
-    p.rect(R(7.22, D, 0.90, 0.15), BLEU_C, BLEU, 1.1); p.hachures(R(7.22, D, 0.90, 0.15), BLEU, 3.6, 0.35)     # fermeture de la porte NE
+    for m in CONSERVES: p.mur(m, 'ex')
+    p.rect(R(XC, 1.027, 0.15, 0.15), (0.5,) * 3, NOIR, 0.5)                                                  # poteau K1 : même marque que sur le plan source
+    for m in NEUFS: p.mur(m, 'neuf')                                                                         # tous les murs neufs, y compris la fermeture de la porte NE alignée sur le mur nord
     p.txt(X(7.12), Y(5.42), 'fermeture porte NE', 6.2, 'helv', BLEU)
     # ouvertures de la cloison centrale, fenêtre de la chambre, menuiseries et appareils neufs (bleu)
     for (a, b), nom in ((V.OUV_S, 'ouv. 80x220'), (V.OUV_N, 'ouv. 90x220')):
-        p.rect(R(4.06, a, 0.15, b - a), None, BLEU, 0.9, '[3 2] 0'); p.txt(X(4.36), Y(a) - 2, nom, 5.8, 'helv', BLEU, rot=90)
+        p.rect(clip_int(R(XC, a, 0.15, b - a)), None, BLEU, 0.9, '[3 2] 0'); p.txt(X(4.36), Y(a) - 2, nom, 5.8, 'helv', BLEU, rot=90)
     p.arc(*V.PORTE_SDB[:4], V.PORTE_SDB[4], BLEU); p.arc(*V.PORTE_NO[:4], V.PORTE_NO[4], (0.35,) * 3)
     p.rect(R(0.20, -0.15, 1.00, 0.15), None, BLEU, 1.1, '[3 2] 0'); p.txt(X(0.25), Y(0.30), 'fenêtre 100x125, allège 0.95', 5.8, 'helv', BLEU); p.txt(X(0.25), Y(0.30) + 7, 'bas fixe, haut à soufflet', 5.8, 'helv', BLEU)
     for m in (V.U_N, V.U_E, V.U_S):
-        p.rect(R(*m[1:]), None, BLEU, 1.0)
+        p.rect(clip_int(R(*m[1:])), None, BLEU, 1.0)
         if m[3] >= m[4]: p.line(P(m[1] + 0.05, m[2] + m[4] / 2), P(m[1] + m[3] - 0.05, m[2] + m[4] / 2), BLEU, 0.5, '[2 2] 0')
         else: p.line(P(m[1] + m[3] / 2, m[2] + 0.05), P(m[1] + m[3] / 2, m[2] + m[4] - 0.05), BLEU, 0.5, '[2 2] 0')
     p.txt(X(6.30), Y(5.18), 'penderie en U', 6.2, 'helv', BLEU)
-    for m in (V.VASQUE, V.DOUCHE, V.WC): p.rect(R(*m[1:]), None, BLEU, 1.0)
+    for m in (V.VASQUE, V.DOUCHE, V.WC): p.rect(clip_int(R(*m[1:])), None, BLEU, 1.0)
     p.txt(X(5.66), Y(0.12), 'double vasque', 6.0, 'helv', BLEU, rot=90); p.txt(X(7.45), Y(0.92), 'douche', 6.2, 'helv', BLEU); p.txt(X(7.12), Y(0.30), 'fenêtre 100x60 :', 5.6, 'helv', BLEU); p.txt(X(7.12), Y(0.30) + 6.2, 'soufflet haut dépoli', 5.6, 'helv', BLEU)
-    p.etiquette(7.2, 1.30 + 0.1, 'SDB', (W - 6.10) * SDB_Y); p.etiquette(5.2, 3.95, 'DRESSING', 4.06 * (D - Y_TOP) + 1.74 * Y_TOP)
+    p.etiquette(7.2, 1.30 + 0.1, 'SDB', S_SDB); p.etiquette(5.2, 3.95, 'DRESSING', S_DR)
     cadre(p, None)
     bande(p, 14, 600, 'LÉGENDE', ['Cadre orange : zone des modifications (deux chambres miroirs du R+1).', 'Bleu hachuré : mur ou cloison à construire (épaisseur 0.15).', 'Contour bleu : menuiserie, appareil ou agencement neuf.', 'Gris : existant conservé.', 'Mobilier libre non figuré (voir le projet final).'], 100)
     bande(p, 722, 600, 'CONSTRUCTIONS', ['1. Cloison nord de la salle de bain, 2.32 m, à 2.38 de la façade ; mur ouest prolongé de 0.75 m (rebouchage 0.57 et mur au-dessus de la porte déplacée à 1.55-2.35).', '2. Fermeture de la porte NE (0.90 x 2.20) en maçonnerie.', '3. Deux ouvertures dans la cloison centrale, 80x220 (côté façade) et 90x220 (côté nord), avec linteaux : on entre et on sort du dressing de chaque côté ; sans porte.', '4. Fenêtre du dressing 160x125, allège 0.95 (à la hauteur de la double vasque), tête 2.20, dans l\'ouverture de la baie est (162) : maçonnerie d\'allège 1.62 x 0.95 à construire.', '5. Fenêtre de la chambre : l\'ancienne fenêtre du WC ouest devient 100x125, allège 0.95 : partie basse fixe, partie haute à soufflet.', '6. Double vasque 1.40 contre le mur ouest de la salle de bain ; penderie en U limitée à la ligne rouge, sans îlot.', '7. Salle de bain : douche 1.20 x 1.00 et WC suspendu, sans vasque ; porte 80x220, vantail ouvert contre le mur nord.', 'POINTS DE L\'INGÉNIEUR : (a) cloison nord de la salle de bain parallèle aux nervures 12+8, à 0.55 de l\'ancienne : poutrelle doublée ou calcul de charge ; (b) linteaux neufs de la porte 1.55-2.35 et des deux ouvertures (sous C4 et B14), appuis de 0.20, joints de désolidarisation sous poutre ; (c) attentes de plomberie à relever sur site (WC déplacé, double vasque) ; (d) étanchéité sous faïence toute hauteur derrière la double vasque et la douche.'], 100)
@@ -221,8 +223,14 @@ def v_constructions(doc, src):
 
 
 # ---------------------------------------------------------------------------------------------------- version 3 : projet final
+def clip_int(r):
+    """Un élément ne recouvre jamais le trait d'un mur : bords rentrés à l'intérieur de la pièce."""
+    return pymupdf.Rect(max(r.x0, 191.0), max(r.y0, 580.3), min(r.x1, 659.0), min(r.y1, 898.4))
+
+
 def meuble(p, m, kind):
     r = R(*m[1:]); x, y, l, h = m[1:]
+    r = clip_int(r)
     if kind == 'lit':                                                           # tête à l'est (contre la cloison centrale)
         p.rect(r, (1, 1, 1), NOIR, 0.6); p.rect(R(x + l - 0.44, y + 0.08, 0.40, 0.62), (1, 1, 1), NOIR, 0.48); p.rect(R(x + l - 0.44, y + h - 0.70, 0.40, 0.62), (1, 1, 1), NOIR, 0.48)
         p.line(P(x + l - 0.55, y + 0.05), P(x + l - 0.55, y + h - 0.05), NOIR, 0.48)
@@ -245,19 +253,73 @@ def meuble(p, m, kind):
 
 def v_final(doc, src):
     p = Pg(doc, src); cartouche(p, 'R+1 - PROJET FINAL', '018'); vider_zone(p); retirer_ss(p); chaines(p); fenetre_est(p, True)
-    p.mur((4.06, V.OUV_S[1], 0.15, V.OUV_N[0] - V.OUV_S[1]), 'ex'); p.mur((5.95, 0, 0.15, 1.55), 'ex')                 # cloison centrale ; mur ouest de la salle de bain (une seule pièce, sans joint apparent)
-    L = [(5.95, 2.35), (6.10, 2.35), (6.10, SDB_Y), (W, SDB_Y), (W, Y_TOP), (5.95, Y_TOP)]                              # mur au-dessus de la porte et mur nord de la salle de bain d'un seul tenant
+    p.mur((XC, V.OUV_S[1], 0.15, V.OUV_N[0] - V.OUV_S[1]), 'ex'); p.mur((XM, 0, 0.15, 1.55), 'ex')                      # cloison centrale ; mur ouest de la salle de bain (une seule pièce, sans joint apparent)
+    L = [(XM, 2.35), (XE_M, 2.35), (XE_M, SDB_Y), (W, SDB_Y), (W, Y_TOP), (XM, Y_TOP)]                                   # mur au-dessus de la porte et mur nord de la salle de bain d'un seul tenant
     p.poly([P(*q) for q in L], NOIR, 0.84, None, GRIS, True)
-    p.rect(R(4.06, 0.81, 0.15, 0.60), (0.5,) * 3, NOIR, 0.5); p.rect(R(7.22, D, 0.90, 0.15), GRIS, NOIR, 0.84)       # K1, porte NE fermée
+    p.rect(R(XC, 1.027, 0.15, 0.15), (0.5,) * 3, NOIR, 0.5); fermer_porte_ne(p)                                      # K1 (marque du plan source), porte NE fermée dans le prolongement exact du mur nord
     p.line(P(7.07, 1.00), P(W, 1.00), (0.2, 0.5, 0.9), 1.2)                                                           # paroi vitrée douche / WC
     p.arc(*V.PORTE_NO[:4], V.PORTE_NO[4]); p.arc(*V.PORTE_SDB[:4], V.PORTE_SDB[4])
     for m, k in ((V.LIT, 'lit'), (V.CHEV_S, 'rect'), (V.CHEV_N, 'rect'), (V.FAUT, 'faut'), (V.GUER, 'rond'), (V.COMM, 'rect'), (V.TV, 'tv'), (V.U_N, 'pend'), (V.U_E, 'pend'), (V.U_S, 'pend'), (V.VASQUE, 'vasque2'), (V.DOUCHE, 'douche'), (V.WC, 'wc')): meuble(p, m, k)
     p.txt(X(6.55), Y(5.35), 'penderie', 6.2, 'helv', (0.35,) * 3)
-    p.etiquette(2.15, 4.35, 'CHAMBRE', 4.06 * D); p.etiquette(5.2, 3.95, 'DRESSING', 4.06 * (D - Y_TOP) + 1.74 * Y_TOP); p.etiquette(7.0, 1.55, 'SDB', (W - 6.10) * SDB_Y)
+    p.etiquette(2.15, 4.35, 'CHAMBRE', S_CH); p.etiquette(5.2, 3.95, 'DRESSING', S_DR); p.etiquette(7.0, 1.55, 'SDB', S_SDB)
     cadre(p, None)
     bande(p, 14, 600, 'LÉGENDE', ['Cadre orange : zone des modifications (deux chambres miroirs du R+1 transformées en une suite parentale).', 'Parcours : chambre, dressing, salle de bain ; on entre et on sort du dressing par deux ouvertures de porte (0.80 côté façade, 0.90 côté nord).', 'Lumière et air naturels : fenêtre 160x125 pour le dressing, fenêtre 100x125 pour la chambre (bas fixe, haut à soufflet), fenêtre 100x60 à soufflet haut dépoli pour la salle de bain, au-dessus de la douche.'], 100)
-    bande(p, 722, 600, 'SURFACES NETTES (m²)', ['Avant : 2 chambres de 18.18 et 2 toilettes de 3.97.', 'Après : chambre 22.94 ; dressing 17.07 (hall et penderie en U, allée centrale 1.92) ; salle de bain 5.16, avec WC et douche seulement.', 'Double vasque 1.40 contre le mur de la salle de bain, côté dressing : elle sert de lave-mains.', 'Pas d\'îlot : un îlot de 1.00 de large ne laisse pas 0.90 de passage de chaque côté.', 'Écart au standard : fenêtre de chambre de 100 de large (standard 140 ou 160), conservée à la demande du client ; lue comme 100x125, allège 0.95 (une lecture jusqu\'au sol est possible).', 'Deux ouvertures sans porte (80x220 et 90x220) : intimité du lit et de la salle de bain à traiter si besoin. Baie ouest : porte-fenêtre coulissante, conservée.', 'Le WC n\'est pas en cabinet fermé (pièce de 2.17 x 2.38).', 'Cotes en mètres. Plan sous réserve du relevé des attentes sur site et du visa de l\'ingénieur de structure.'], 100)
+    bande(p, 722, 600, 'SURFACES NETTES (m²)', ['Avant : 2 chambres de 18.18 et 2 toilettes de 3.97.', 'Après : chambre {CH} ; dressing {DR} (hall et penderie en U, allée centrale 1.92) ; salle de bain {SDB}, avec WC et douche seulement.', 'Double vasque 1.40 contre le mur de la salle de bain, côté dressing : elle sert de lave-mains.', 'Pas d\'îlot : un îlot de 1.00 de large ne laisse pas 0.90 de passage de chaque côté.', 'Écart au standard : fenêtre de chambre de 100 de large (standard 140 ou 160), conservée à la demande du client ; lue comme 100x125, allège 0.95 (une lecture jusqu\'au sol est possible).', 'Deux ouvertures sans porte (80x220 et 90x220) : intimité du lit et de la salle de bain à traiter si besoin. Baie ouest : porte-fenêtre coulissante, conservée.', 'Le WC n\'est pas en cabinet fermé (pièce de 2.17 x 2.38).', 'Cotes en mètres. Plan sous réserve du relevé des attentes sur site et du visa de l\'ingénieur de structure.'], 100)
     return p
+
+
+# ---------------------------------------------------------------------------------------------------- murs et contrôles des raccords
+CONSERVES = [(XC, V.OUV_S[1], 0.15, V.OUV_N[0] - V.OUV_S[1]), (XM, 0.0, 0.15, 0.98)]                         # cloison centrale entre les ouvertures ; pied du mur ouest de la salle de bain
+NEUFS = [(XM, 0.98, 0.15, 0.57), (XM, 2.35, 0.15, Y_TOP - 2.35), (XM, SDB_Y, W - XM, 0.15), (NE0, D, NE1 - NE0, 0.15)]   # rebouchage, mur au-dessus de la porte, mur nord de la SDB, fermeture NE
+LIBRES = [(XC + 0.075, V.OUV_S[1]), (XC + 0.075, V.OUV_N[0]), (XM + 0.075, 1.55), (XM + 0.075, 2.35)]       # jambages d'ouverture : extrémités libres voulues
+
+
+def fermer_porte_ne(p):
+    """Fermeture de la porte NE dans le prolongement EXACT du mur nord (mêmes faces, même épaisseur, mêmes traits de bord que la source)."""
+    r = R(NE0, D, NE1 - NE0, 0.15); e = 0.5
+    p.rect(pymupdf.Rect(r.x0 - e, r.y0, r.x1 + e, r.y1), GRIS, None, 0)
+    for yy in (r.y0, r.y1): p.line(pymupdf.Point(r.x0 - e, yy), pymupdf.Point(r.x1 + e, yy), NOIR, 0.84)
+
+
+def murs_source():
+    """Murs et poteaux EXTÉRIEURS de la source (appuis des raccords), relevés dans le vectoriel de la page 15, en mètres (x, y, l, h)."""
+    out = []; Z = pymupdf.Rect(150, 560, 700, 1010)
+    with pymupdf.open(SRC) as s:
+        for dr in s[14].get_drawings():
+            f = dr.get('fill')
+            for it in dr['items']:
+                r = it[1] if it[0] == 're' else (it[1].rect if it[0] == 'qu' else None)
+                if r is None or not Z.intersects(r) or not f or r.width < 1 or r.height < 1 or not (abs(f[0] - 0.75) < 0.01 or abs(f[0] - 0.5) < 0.01): continue
+                m = ((r.x0 - X0) / K, (Y0 - r.y1) / K, r.width / K, r.height / K)
+                if m[1] + m[3] <= 0.001 or m[1] >= D - 0.01 or m[0] + m[2] <= 0.001 or m[0] >= W - 0.001: out.append(m)   # façade, mur nord, murs ouest et est
+    return out
+
+
+def murs_source_tous():
+    with pymupdf.open(SRC) as s:
+        out = []
+        for dr in s[14].get_drawings():
+            f = dr.get('fill')
+            for it in dr['items']:
+                r = it[1] if it[0] == 're' else (it[1].rect if it[0] == 'qu' else None)
+                if r is not None and pymupdf.Rect(150, 560, 700, 1010).intersects(r) and f and abs(f[0] - 0.75) < 0.01 and r.width > 1 and r.height > 1: out.append(((r.x0 - X0) / K, (Y0 - r.y1) / K, r.width / K, r.height / K))
+    return out
+
+
+# zones où le dessin a le DROIT de différer de la source (points) : intérieur de la zone, chaînes refaites, ouvertures modifiées, cadre orange, légendes, cartouche
+ZONES_ERASE = [(191.0, 580.6, 659.0, 898.4), (142, 586, 181.5, 892.5), (669, 586, 704, 892.5), (315, 897.5, 335, 912), (541, 897.5, 561, 912)]
+ZONES_OK = ZONES_ERASE + [(X(0.20) - 2, 897, X(1.20) + 2, 909), (141, 575, 183, 900), (668, 575, 705, 900),
+                          (431.4, 899.4, 522.9, 906.6), (R(NE0, D, NE1 - NE0, 0.15).x0 - 2, 569.5, R(NE0, D, NE1 - NE0, 0.15).x1 + 2, 581.5),
+                          (158, 549, 708, 566), (158, 1008, 708, 1016), (158, 549, 164, 1016), (702, 549, 708, 1016), (10, 590, 132, 1010), (715, 590, 836, 1010), (404, 1064, 614, 1129)]
+
+
+def controler_raccords(chemin):
+    """Raccords des murs neufs, fidélité hors zones modifiées et texte d'origine périmé : toute anomalie est renvoyée (liste vide = conforme)."""
+    err = ['MURS : ' + e for e in CR.raccords_murs(CONSERVES, NEUFS, appuis=murs_source(), libres=LIBRES, source=murs_source_tous())]
+    for page in (1, 2):
+        for b in CR._fidelite(SRC, 14, chemin, page, ZONES_OK, 200, 40, 1.0): err.append('PAGE %d : différence avec la source hors zone modifiée, boîte (pt) %s' % (page + 1, b))
+        for w in CR.texte_perime(SRC, 14, chemin, page, ZONES_ERASE): err.append('PAGE %d : texte d\'origine périmé encore extractible %s' % (page + 1, w))
+    return err
 
 
 def construire():
@@ -265,10 +327,17 @@ def construire():
     v_demolitions(doc, src); v_constructions(doc, src); v_final(doc, src)
     doc.set_metadata({'title': 'MBAO - R+1 - Suite parentale - demolitions, constructions, projet final', 'author': 'D&F ENGINEERING'})
     doc.save(OUT, deflate=True, garbage=3)
+    global ERR
+    err = ERR = controler_raccords(OUT)
+    for e in err: print('RACCORD :', e)
+    print('contrôle des raccords :', 'CONFORME' if not err else '%d anomalie(s)' % len(err))
     ap = os.path.join(HERE, 'apercus', 'pdf'); os.makedirs(ap, exist_ok=True)
     for i, pg in enumerate(doc): pg.get_pixmap(dpi=100).save(os.path.join(ap, 'page%d.png' % (i + 1)))
     return OUT
 
 
+ERR = []
+
 if __name__ == '__main__':
-    print(construire())
+    construire()
+    sys.exit(1 if ERR else 0)
