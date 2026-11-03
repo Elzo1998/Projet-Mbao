@@ -89,6 +89,15 @@
    "preuve": "",
    "source": "msg 03/11 (MBAO, raccords)",
    "moment": "APERCU"
+  },
+  {
+   "id": "C-010",
+   "date": "2026-11-03",
+   "texte": "Livrer la DERNIÈRE VERSION FINALE (PDF 3 pages) avec TOUS les contrôles passés, destinée à être remise au client ; avant livraison : corriger tous les défauts de raccord relevés par le vérificateur (traits de mur coupés, coutures de la fermeture NE, jambage de la salle de bain à 2.38, ticks de cotes orphelins, arc de la porte NO relevé, traits bleus de la page 2).",
+   "statut": "a_faire",
+   "preuve": "",
+   "source": "msg 03/11 (MBAO, version finale)",
+   "moment": "APERCU"
   }
  ]
 }

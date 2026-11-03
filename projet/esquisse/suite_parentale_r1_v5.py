@@ -36,8 +36,8 @@ VASQUE = ('Double vasque 1.40', XM - 0.50, 0.05, 0.50, 1.40)      # contre le mu
 # ---- salle de bain 2.17 x 2.38 : douche SE sous la fenêtre existante, WC suspendu mur est (plus de vasque)
 DOUCHE = ('Douche 1.20 x 1.00', 7.07, 0.0, 1.20, 1.00)
 WC = ('WC susp.', 7.72, 1.52, 0.55, 0.36)
-PORTE_SDB = ((XE_M, 2.35), 0.80, 270, 360, 0)           # porte 1.55-2.35 du mur ouest, charnière au nord : vantail ouvert à plat contre le mur nord
-PORTE_NO = ((0.122, D), 0.889, 270, 360, 270)             # porte d'entrée de la suite (existante) : vantail contre le mur ouest
+PORTE_SDB = ((XE_M, SDB_Y), 0.80, 270, 360, 0)         # porte 1.58-2.38 du mur ouest, charnière au nord : vantail ouvert à plat contre le mur nord (jambage dans le prolongement de sa face)
+PORTE_NO = ((0.175, 5.70), 0.787, 270, 360, 270)       # arc relevé sur le vectoriel du plan source : centre (0.175, 5.70), rayon 0.787             # porte d'entrée de la suite (existante) : vantail contre le mur ouest
 # ---- fenêtres de façade (x0, x1, allège, hauteur)
 FEN_CH = (0.20, 1.20, ALLEGE, 1.25)                     # chambre : 1.00, bas fixe 0.95-1.60, haut à soufflet 1.60-2.20 (ancienne fenêtre de WC)
 FEN_DR = (4.25, 5.85, ALLEGE, 1.25)                     # dressing : 1.60 x 1.25
@@ -82,14 +82,14 @@ def controles():
     t('CIR-013', 'Dressing : allée entre penderie nord et penderie sud', pn.distance(ps), 0.90)
     t('CIR-013', 'Dressing : allée devant la penderie est (jusqu\'au bord ouest du U)', U_E[1] - XE_M, 0.90)
     t('CIR-019', 'Double vasque : libre devant >= 0.70 (côté cloison centrale)', (XM - 0.50) - 4.209, 0.70)
-    t('CIR-020', 'Porte SDB : approche libre côté dressing (0.80) devant la porte', vq.distance(box(5.15, 1.55, 5.95, 2.35)), 0.0)
+    t('CIR-020', 'Porte SDB : approche libre côté dressing (0.80) devant la porte', vq.distance(box(5.15, 1.58, XM, SDB_Y)), 0.0)
     # --- salle de bain
     t('SDE-005', 'Douche italienne >= 1.20 x 0.90 (1.20 x 1.00)', min(DOUCHE[3], 1.20 * DOUCHE[4] / DOUCHE[4]), 1.20)
     t('SDE-007', 'WC : axe à >= 0.40 de la douche', (WC[2] + 0.18) - DOUCHE[4], 0.40)
     t('SDE-007', 'WC : axe à >= 0.40 du mur nord de la SDB', SDB_Y - (WC[2] + 0.18), 0.40)
     t('CIR-018', 'WC : zone libre 0.60 devant la cuvette', libre(box(7.12, 1.52, 7.72, 1.88), [R(DOUCHE), pie(*PORTE_SDB[:4])]), 0.0)
     t('CIR-020', 'Douche : approche libre 0.70 x 0.70', libre(box(6.37, 0.0, 7.07, 0.70), [R(WC), pie(*PORTE_SDB[:4])]), 0.0)
-    t('PORTE', 'Porte SDB : vantail ouvert adossé au mur nord (jeu <= 0.05)', 0.05 - (SDB_Y - 2.35), 0.0)
+    t('PORTE', 'Porte SDB : vantail ouvert adossé au mur nord (jeu <= 0.05)', 0.05 - (SDB_Y - PORTE_SDB[0][1]), 0.0)
     # --- fenêtres
     t('FEN-001', 'Fenêtre du dressing : tête à 2.20 (allège 0.95 + 1.25)', FEN_DR[2] + FEN_DR[3], LINTEAU)
     t('FEN-001', 'Fenêtre de la chambre : tête à 2.20 (allège 0.95 + 1.25)', FEN_CH[2] + FEN_CH[3], LINTEAU)
