@@ -109,6 +109,14 @@
    "preuve": "PDF indice F : 42 controles 0 ecart, raccords CONFORME, verificateur LIVRABLE (0 bloquant, 2 mineurs corriges) ; attente validation client",
    "source": "client 03/11",
    "maj": "2026-11-03 17:35"
+  },
+  {
+   "id": "C-012",
+   "date": "2026-11-03",
+   "texte": "C-012 : 4 vues 3D schematiques pour passage ChatGPT/Nano Banana SANS hallucination : l'IA ameliore textures/lumiere mais n'ajoute pas de mobilier -> chaque vue doit montrer assez d'elements remarquables et une intention de matiere. Murs blancs ; mur TV en lambris ; references client (dressing vitre alu noir, interieur noyer, LED, ilot dessus noir/bois, sol clair) mais ilot decale colle au mur ; coherence stricte avec le 2D (indice F). Methode la plus simple et la moins gourmande a proposer. Points de l'ingenieur page 2 : a retirer seulement si aucun element structurel connu.",
+   "statut": "a_faire",
+   "preuve": "",
+   "source": "client 03/11"
   }
  ]
 }
