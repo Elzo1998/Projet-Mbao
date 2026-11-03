@@ -2,7 +2,7 @@
 
 ## Démarrage (message à coller dans une nouvelle session)
 > Lis CLAUDE.md et REPRISE.md du dépôt elzo1998/projet-mbao (branche claude/exciting-cannon-gv8rr1), puis le CLAUDE.md de l'atelier
-> (elzo1998/atelier-archi-ingenierie, à cloner dans /home/user/atelier-archi-ingenierie, branche claude/exciting-cannon-gv8rr1 tant qu'elle n'est pas fusionnée dans main).
+> (elzo1998/atelier-archi-ingenierie, à cloner dans /home/user/atelier-archi-ingenierie, branche main : tout y est fusionné depuis le 03/11).
 > Applique la skill `passation` en sens inverse (section « Reprise »), puis continue à partir de « Prochaine action ».
 
 ## Le projet
@@ -21,7 +21,7 @@ Contenu de la version E : cloison centrale conservée avec DEUX ouvertures sans 
 - **Ce qui dépend du PAYS = surtout le prix des matériaux et la devise** (Sénégal F CFA `base_prix.json`, Gambie GMD `prix_gambie.*`) ; la méthode de travail est la même partout en Afrique de l'Ouest ; langue des livrables d'architecture = langue du pays, métré toujours en français. Fiches : `pays/<code>/PAYS.md`.
 - **Dans le code, seul le style SABTP est encore programmé** (`outils/dessin_plan.py`, cartouche) : paramétrer par entreprise reste à faire (`METHODOLOGIE/FUTUR.md`).
 - Détail : `METHODOLOGIE/ENTREPRISE_PAYS.md` (atelier). Idées d'avenir notées par le client : tableau de bord de l'atelier avec les entreprises en entrée puis leurs projets ; trouver un nom neutre pour l'atelier ; débaptiser « SABTP » de tout ce qui est commun.
-- **ATTENTION** : ces règles ne sont que sur la BRANCHE `claude/exciting-cannon-gv8rr1` de l'atelier, pas dans `main`. Tant qu'elles ne sont pas fusionnées, toute session doit cloner / mettre à jour cette branche, et non `main`.
+- **FUSIONNÉ dans `main` de l'atelier le 03/11/2026 (commit a71c60d, sur demande du client)** : toute session reprend `main`, qui contient ces règles.
 
 ## Décisions du client à ne pas rouvrir
 Pas d'îlot (impossible >= 1.00 avec circulation fluide) ; deux ouvertures sans porte ; WC non en cabinet fermé ; fenêtre de chambre de 100 de large (hors standard 140/160, à sa demande) ; lecture « 1 m sur toute la hauteur » = 100x125 (une lecture « jusqu'au sol » reste possible, à demander si doute) ; image (PNG) d'abord, PDF après validation ; plans : mètre partout, désignations de menuiserie en cm.
@@ -39,13 +39,13 @@ Pas d'îlot (impossible >= 1.00 avec circulation fluide) ; deux ouvertures sans 
 ## Fichiers du projet (utiles)
 `projet/esquisse/` : `suite_parentale_r1_v5.py` (géométrie version E + contrôles), `pdf_r1_suite.py` (génération du PDF + contrôle des raccords ; fond = copie préparée de la page 15 de la source dans /tmp/mbao_base_preparee.pdf), `suite_parentale_r1.py` (relevé de l'existant, cotes MESURÉES sur le vectoriel), `suite_parentale_r1_v2/v3/v4.py` + `apercus/` (versions antérieures, historique) ; `projet/consignes.json` (C-001 à C-010) ; `projet/livrables/` (PDF final).
 
-## Atelier (branche `claude/exciting-cannon-gv8rr1`, NON fusionnée dans main : attend la validation du client)
+## Atelier (branche `claude/exciting-cannon-gv8rr1` FUSIONNÉE dans main le 03/11, commit a71c60d)
 Entreprise × pays (`entreprises/sabtp`, `entreprises/df-engineering`, `pays/senegal`, `pays/gambie`, `METHODOLOGIE/ENTREPRISE_PAYS.md`, `outils/identite.py`, `outils/amorcer_projet.py --entreprise --pays`) ; règle fondamentale : hors identité (nom, logo, contacts, graphisme), TOUT est commun aux entreprises, d'un pays à l'autre seul le prix change ; charte SABTP déplacée dans `entreprises/sabtp/` ; `METHODOLOGIE/FUTUR.md` (tableau de bord par entreprise, nom de l'atelier, débaptiser « SABTP » du commun, identité D&F, Mauritanie, outil de modification de plan PDF) ; **contrôle des raccords** : `outils/controle_raccords.py` (auto-test `--test`), `METHODOLOGIE/CONTROLE_RACCORDS.md`, règles RAC-001 à RAC-011, POR-019, POR-020, FEN-033 du catalogue, agents `verificateur` et `controleur-plans`, skills 01-esquisse et 01b, CLAUDE.md. Récit et leçons : `METHODOLOGIE/RETEX_MBAO_2026-11-03.md`.
 
 ## Prochaine action (exacte)
 1. Attendre la réponse du client sur la version E (validation ou retouches). Toute retouche : consigne dans `projet/consignes.json` AVANT d'agir, modifier la géométrie dans `suite_parentale_r1_v5.py` / `pdf_r1_suite.py`, relancer les deux scripts (0 anomalie), faire repasser l'agent `verificateur`, puis envoyer image d'abord, PDF après validation.
 2. Si validé : skill `archivage-livrable` (archive figée du PDF E), passer C-001 à `verifie`, demander s'il y a d'autres mises à jour MBAO à traiter (l'utilisateur en a annoncé « quelques-unes » : seule la suite parentale est faite).
-3. Demander à l'utilisateur la fusion de la branche de l'atelier dans `main` (règle : méthode validée avant fusion) et sa réponse sur les points de l'ingénieur de la page 2.
+3. Demander à l'utilisateur sa réponse sur les points de l'ingénieur de la page 2 (les retirer pour le maître d'ouvrage ?). La fusion de l'atelier dans main est faite.
 
 ## Environnement
 - `pip install pymupdf shapely reportlab matplotlib numpy pyyaml pillow` s'ils manquent (matplotlib et numpy servent aux anciens scripts v2-v4 et au contrôle de fidélité).
