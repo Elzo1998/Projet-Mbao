@@ -127,6 +127,15 @@
    "preuve": "projet/livrables/MBAO_Terrasse_indiceA_FINAL.pdf ; raccords CONFORME ; verificateur: 1 important (92.53 page 2) corrige, 0 bloquant",
    "source": "client 05/11",
    "maj": "2026-11-05 13:49"
+  },
+  {
+   "id": "C-014",
+   "date": "2026-11-05",
+   "texte": "C-014 : terrasse indice B : (1) cuisine : plan de travail en L suivant les murs (nord + est), profondeur 0.60, vasque axee sur la fenetre, four (plaque + four) a prevoir, frigo prevu ; (2) porte de la toilette : s'ouvre vers l'INTERIEUR de la toilette, contre le mur (plus vers le bac) ; (3) toilette amenagee : emplacement lave-mains, WC, receveur de douche avec siphon, representer la 'seche' de la douche (paroi/receveur)",
+   "statut": "fait",
+   "preuve": "MBAO_Terrasse_indiceB_FINAL.pdf ; raccords CONFORME ; verificateur: 1 important (cote 1.26) corrige",
+   "source": "client 05/11 (apres indice A)",
+   "maj": "2026-11-05 15:05"
   }
  ]
 }
