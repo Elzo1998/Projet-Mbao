@@ -1,6 +1,6 @@
 """MBAO - plan TERRASSE (C-013) : cuisine fermée, nouvelle toilette, bac lessive / vaisselle. Page 1 = plan, page 2 = tableaux.
 
-python3 -I projet/esquisse/pdf_terrasse.py   ->  projet/livrables/MBAO_Terrasse_indiceB_FINAL.pdf (+ aperçus PNG dans apercus/terrasse/)
+python3 -I projet/esquisse/pdf_terrasse.py   ->  projet/livrables/MBAO_Terrasse_indiceC_FINAL.pdf (+ aperçus PNG dans apercus/terrasse/)
 
 Fond = page 17 (index 16) de PROJET_MBAO_Architecture_V2.pdf (vectoriel, 1:50, charte D&F : murs gris 0.75, faces noires 2.52, cotes 0.72).
 Tout est RELEVÉ sur le vectoriel (RAC-007) : échelle 51.5 pt/m (cuisine 271.92 pt = 5.28 m ; murs extérieurs 441.6 pt = 8.57 m), mur 7.68 pt.
@@ -12,7 +12,7 @@ import pymupdf
 from shapely.geometry import Polygon, box
 HERE = os.path.dirname(os.path.abspath(__file__))
 SRC = os.path.join(os.path.dirname(HERE), 'source', 'PROJET_MBAO_Architecture_V2.pdf')
-OUT = os.path.join(os.path.dirname(HERE), 'livrables', 'MBAO_Terrasse_indiceB_FINAL.pdf')
+OUT = os.path.join(os.path.dirname(HERE), 'livrables', 'MBAO_Terrasse_indiceC_FINAL.pdf')
 PG = 16
 sys.path.insert(0, '/home/user/atelier-archi-ingenierie/outils'); import controle_raccords as CR
 
@@ -36,9 +36,10 @@ def M(x, y): return ((x - OX) / K, (y - OY) / K)
 
 # ------------------------------------------------------------------ données du projet (mètres client -> points)
 FEN_C = (OY + 0.75 * K, OY + 2.75 * K)                      # fenêtre cuisine 2.00 x 1.25 dans le mur est (y 0.75 à 2.75)
-POR_C = (OX + 0.30 * K, OX + 1.20 * K)                      # porte cuisine 0.90 x 2.20 dans le mur sud (x 0.30 à 1.20)
+PW = 48.72                                                   # largeur d'ouverture de la porte existante de l'escalier (relevé : 228.36 à 277.08 = 0.95)
+POR_C = (OX + 0.30 * K, OX + 0.30 * K + PW)                      # porte cuisine 0.90 x 2.20 dans le mur sud (x 0.30 à 1.20)
 FEN_T = (XC1 + 1.62 * K, XC1 + 2.62 * K)                    # fenêtre toilette 1.00 x 0.60 dans le mur nord (1.62 de l'angle ouest)
-POR_T = (XC1, XC1 + 0.90 * K)                               # porte toilette 0.90 x 2.20 dans le mur sud, côté ouest (réponse client 05/11)
+POR_T = (XC1, XC1 + PW)                               # porte toilette 0.90 x 2.20 dans le mur sud, côté ouest (réponse client 05/11)
 WT = 0.60 * K                                                # profondeur du plan de travail
 Y_FR = YE0 - 0.70 * K                                        # haut du frigo 0.70 x 0.70 (angle sud-est)
 HOB_X0 = XW_I + 2.00 * K                                     # plaque 0.60 : axe à 2.30 de la face ouest
@@ -205,19 +206,37 @@ def ouverture_vert_mur(p, ya, yb, x0, x1):
     for k in range(4): p.line((x0 + k * (x1 - x0) / 3, ya), (x0 + k * (x1 - x0) / 3, yb), NOIR, W_DET if k in (0, 3) else 0.48)
 
 
+def source_porte():
+    """Traits noirs fins du dessin de la porte existante de l'escalier (mur sud de l'escalier, ouverture 228.36 à 277.08, battant vers la terrasse), relevés sur le vectoriel."""
+    out = []
+    with pymupdf.open(SRC) as s_:
+        for dr in s_[PG].get_drawings():
+            w, c, r = dr.get('width') or 0, dr.get('color'), dr['rect']
+            if c is None or tuple(round(v, 2) for v in c) != (0, 0, 0) or w >= 1.0 or dr.get('fill') is not None: continue
+            if not (r.x0 >= 226.5 and r.x1 <= 278.0 and r.y0 >= 509.5 and r.y1 <= 556.0): continue
+            for it in dr['items']:
+                if it[0] == 'l': out.append((it[1].x, it[1].y, it[2].x, it[2].y, w))
+    return out
+
+
+def porte_source(p, xl, caps):
+    """Même porte que celle de l'escalier : dessin de la source translaté au jambage ouest xl et retourné (battant vers le nord) dans un mur sud de la toilette ou de la cuisine."""
+    dx, yc = xl - 228.36, (YE0 + YE1) / 2
+    if caps:
+        for x in (xl, xl + PW): p.line((x, YE0), (x, YE1), NOIR, W_FACE)
+    for x0, y0, x1, y1, w in source_porte():
+        p.line((x0 + dx, yc - (y0 - 514.32)), (x1 + dx, yc - (y1 - 514.32)), NOIR, w)
+
+
 def dessiner_plan(p):
     murs_neufs(p)
     # --- cuisine : fenêtre 2.00 x 1.25 (mur est), porte 0.90 x 2.20 (mur sud, battant vers la cuisine)
     ouverture_vert_mur(p, FEN_C[0], FEN_C[1], XC0, XC1)
     p.blanc((POR_C[0], YE0 - W_FACE / 2 - 0.2, POR_C[1], YE1 + W_FACE / 2 + 0.2))
-    for x in POR_C: p.line((x, YE0), (x, YE1), NOIR, W_FACE)
-    ch = (POR_C[0], YE0); r = POR_C[1] - POR_C[0]
-    p.arc_porte(ch, r, 0, -90)                                           # charnière à l'ouest, vantail ouvert vers le nord
+    porte_source(p, POR_C[0], caps=True)                                  # même porte que celle de l'escalier (copie du dessin de la source), battant vers la cuisine
     # --- toilette : fenêtre 1.00 x 0.60 (mur nord), porte 0.90 x 2.20 (mur sud côté ouest, battant vers la terrasse, charnière à l'est)
     ouverture_horiz_mur(p, FEN_T[0], FEN_T[1], YH0, YH1)
-    r = POR_T[1] - POR_T[0]
-    p.arc_porte((POR_T[0], YE0), r, 0, -90, vantail=False)               # porte vers l'INTÉRIEUR : charnière à l'ouest, vantail ouvert à 90 degrés contre le mur ouest (C-014)
-    p.rect((POR_T[0] + 1.5, YE0 - r, POR_T[0] + 4.0, YE0 - 1.3), BLANC, NOIR, W_DET)
+    porte_source(p, POR_T[0], caps=False)                                 # même porte que celle de l'escalier, battant vers l'INTÉRIEUR, charnière à l'ouest, contre le mur ouest
     # lave-mains 0.40 x 0.30 contre le mur nord, à 0.30 de la face ouest
     lx = XC1 + 0.30 * K; p.rect((lx, YH1 + 1.4, lx + 0.40 * K, YH1 + 1.4 + 0.30 * K), BLANC, NOIR, W_DET)
     p.oval((lx + 3.0, YH1 + 4.2, lx + 0.40 * K - 3.0, YH1 + 1.4 + 0.30 * K - 2.8), None, NOIR, 0.48); p.oval((lx + 0.20 * K - 1.2, YH1 + 2.0, lx + 0.20 * K + 1.2, YH1 + 4.4), BLANC, NOIR, 0.48)
@@ -226,14 +245,14 @@ def dessiner_plan(p):
     cx = XC1 + 1.40 * K
     p.rect((cx - 0.20 * K, YH1 + 1.4, cx + 0.20 * K, YH1 + 1.4 + 0.18 * K), BLANC, NOIR, W_DET)
     p.oval((cx - 0.18 * K, YH1 + 1.4 + 0.18 * K, cx + 0.18 * K, YH1 + 1.4 + 0.18 * K + 0.50 * K), BLANC, NOIR, W_DET)
-    # douche : receveur maçonné carrelé 0.90 x 1.26 contre le mur est, paroi vitrée fixe 0.70 le long du receveur (passage 0.56 côté sud), siphon de sol au centre
-    sx0 = XE_I - 0.90 * K
-    p.rect((sx0, YH1 + 1.3, XE_I - 1.3, YE0 - 1.3), BLANC, NOIR, W_DET)
-    p.rect((sx0 + 3.0, YH1 + 4.3, XE_I - 4.3, YE0 - 4.3), None, NOIR, 0.4)
-    xs, ys = XE_I - 0.45 * K, YH1 + 0.63 * K
+    # douche : simple pente carrelée vers un siphon au bout (côté mur est), sans receveur ni paroi
+    sx0 = XE_I - 0.90 * K; gris = (0.4, 0.4, 0.4)
+    for a_, b_ in (((sx0, YH1 + 1.3), (XE_I - 1.3, YH1 + 1.3)), ((sx0, YE0 - 1.3), (XE_I - 1.3, YE0 - 1.3)), ((sx0, YH1 + 1.3), (sx0, YE0 - 1.3))): p.line(a_, b_, gris, 0.5, '[3 2] 0')
+    xs, ys = XE_I - 0.12 * K, YH1 + 0.63 * K
+    for yy in (YH1 + 0.40 * K, ys + 3.0, YE0 - 0.22 * K):
+        xe = xs - 7.0; p.line((sx0 + 5.0, yy), (xe, yy), gris, 0.5); p.line((xe - 3.0, yy - 1.8), (xe, yy), gris, 0.5); p.line((xe - 3.0, yy + 1.8), (xe, yy), gris, 0.5)
     p.oval((xs - 2.6, ys - 2.6, xs + 2.6, ys + 2.6), BLANC, NOIR, 0.5); p.line((xs - 2.6, ys), (xs + 2.6, ys), NOIR, 0.4); p.line((xs, ys - 2.6), (xs, ys + 2.6), NOIR, 0.4)
-    p.rect((sx0 - 1.8, YH1 + 1.3, sx0, YH1 + 1.3 + 0.70 * K), (0.9, 0.95, 1.0), NOIR, 0.5)
-    p.txt(sx0 + 4.0, YH1 + 14.0, 'DOUCHE', 5.4, 'hebo'); p.txt(xs - 8.0, ys + 11.0, 'siphon', 5.0, 'helv'); p.txt(sx0 - 3.2, YH1 + 3.0 + 0.58 * K / 2 + 8, 'paroi vitrée', 4.8, 'helv', rot=90)
+    p.txt(sx0 + 4.0, YH1 + 8.5, 'DOUCHE', 5.4, 'hebo'); p.txt(sx0 + 4.0, YH1 + 14.0, 'pente carrelée', 4.6, 'helv'); p.txt(xs - 15.0, ys + 7.5, 'siphon', 4.8, 'helv')
     # --- bac lessive / vaisselle : 1.87 x 1.10, h 0.40, contre le mur sud de la toilette, robinets côté mur
     bx0, by0, bx1, by1 = BAC; rim = 0.10 * K
     p.rect((bx0, by0 + W_FACE / 2, bx1 - W_FACE / 2, by1), BLANC, NOIR, 0.84)
@@ -265,9 +284,9 @@ def dessiner_plan(p):
     p.txtc(288, 237, 'CUISINE', 9.0); p.txtc(288, 248, '%s m²' % fmt(pieces()[0][0][2]), 9.1)
     p.txtc(571, 372, 'TOILETTE', 9.0); p.txtc(571, 382, '%s m²' % fmt(pieces()[0][1][2]), 9.1)
     p.txt(408.2, 657.25, '%s m²' % fmt(S_TERRASSE), 9.1)
-    p.txt(231, 334, 'P 0.90 x 2.20', 6.4); p.txt(511.5, FEN_C[0] + 70.0, 'F 2.00 x 1.25', 6.4, rot=90)
+    p.txt(231, 334, 'P 0.95 x 2.20', 6.4); p.txt(511.5, FEN_C[0] + 70.0, 'F 2.00 x 1.25', 6.4, rot=90)
     p.txtc((FEN_T[0] + FEN_T[1]) / 2, 281.5, 'F 1.00 x 0.60, allège 1.60', 6.4)
-    p.txt(503, 492, 'P 0.90 x 2.20', 6.4)
+    p.txt(503, 492, 'P 0.95 x 2.20', 6.4)
     p.txt(548, 490, 'BAC LESSIVE / VAISSELLE', 6.0, 'hebo'); p.txt(548, 498, 'h 0.40 (2 rangs de briques)', 6.0); p.txt(548, 506, 'robinets côté mur de la toilette', 6.0)
     # --- cotes
     # cuisine : chaîne verticale à 8 pt devant le plan de travail est (0.60 | 2.00 | 1.53 | 0.70 = 4.83), traits d'attache jusqu'au mur
@@ -277,11 +296,11 @@ def dessiner_plan(p):
     # cuisine : plan de travail nord, de gauche à droite : 2.00 | plaque 0.60 | 2.08 | angle 0.60 = 5.28
     p.hcote(XW_I, XC0, 184.0, [(XW_I, HOB_X0, '2.00', 'h'), (HOB_X0, HOB_X0 + 0.60 * K, '0.60', 'h'), (HOB_X0 + 0.60 * K, XC0 - WT, '%.2f' % ((XC0 - WT - HOB_X0 - 0.60 * K) / K), 'h'), (XC0 - WT, XC0, '0.60', 'h')], vers=-1)
     # cuisine : position de la porte, sous le mur sud (côté escalier) : 0.15 | 0.90
-    p.hcote(XW_I, POR_C[1], 412.0, [(XW_I, POR_C[0], '0.15', 'b', 6.5), (POR_C[0], POR_C[1], '0.90', 'h')], vers=-1)
+    p.hcote(XW_I, POR_C[1], 412.0, [(XW_I, POR_C[0], '0.15', 'b', 6.5), (POR_C[0], POR_C[1], '%.2f' % (PW / K), 'h')], vers=-1)
     # toilette : position de la fenêtre, au nord du mur (dans le vide) : 1.62 | 1.00 | 0.23 = 2.85
     p.hcote(XC1, XE_I, 301.0, [(XC1, FEN_T[0], '%.2f' % ((FEN_T[0] - XC1) / K), 'h'), (FEN_T[0], FEN_T[1], '1.00', 'h'), (FEN_T[1], XE_I, '%.2f' % ((XE_I - FEN_T[1]) / K), 'h', -8.0)], vers=1, att=12.0)
     # terrasse : porte | jeu | bac = 0.90 | 0.08 | 1.87 = 2.85
-    p.hcote(XC1, XE_I, 471.0, [(POR_T[0], POR_T[1], '0.90', 'h'), (POR_T[1], BAC[0], '%.2f' % ((BAC[0] - POR_T[1]) / K), 'b'), (BAC[0], BAC[2], '1.87', 'h')], vers=-1, att=17.0)
+    p.hcote(XC1, XE_I, 471.0, [(POR_T[0], POR_T[1], '%.2f' % (PW / K), 'h'), (POR_T[1], BAC[0], '%.2f' % ((BAC[0] - POR_T[1]) / K), 'b'), (BAC[0], BAC[2], '1.87', 'h')], vers=-1, att=17.0)
     # toilette : profondeur 1.26 (ancienne cote déplacée : elle traversait l'aménagement)
     # bac : profondeur 1.10, dans le bac, côté est
     p.vcote(BAC[1], BAC[3], BAC[2] - 9.5, [(BAC[1], BAC[3], '1.10', 'g')], vers=1, att=0.01, hors=0.01)
@@ -290,7 +309,7 @@ def dessiner_plan(p):
 
 def cartouche(p):
     """Titre, n° de plan, dessinateur et date (le cartouche d'origine reste celui de D&F)."""
-    p.blanc((464.2, 1023.0, 584.5, 1042.0)); p.txtc(523.5, 1037.0, 'TERRASSE COTÉ - IND. B', 9.2, 'hebo')
+    p.blanc((464.2, 1023.0, 584.5, 1042.0)); p.txtc(523.5, 1037.0, 'TERRASSE COTÉ - IND. C', 9.2, 'hebo')
     p.blanc((514.5, 1064.5, 534.0, 1080.0)); p.txt(515.6, 1076.4, '019', 9.7, 'helv')
     p.txt(437.5, 1109.0, 'E.H.S.F', 8.6, 'helv'); p.txt(563.0, 1116.2, '05/11/26', 6.4, 'helv')
 
@@ -379,7 +398,6 @@ ERR = []
 def construire():
     base = base_preparee(); doc = pymupdf.open()
     p = Pg(doc, base); dessiner_plan(p); cartouche(p)
-    p2 = page_tableaux(doc, base); cartouche(p2)
     doc.set_metadata({'title': 'MBAO - Terrasse - plan et tableau des pieces (indice A)', 'author': 'D&F ENGINEERING'})
     os.makedirs(os.path.dirname(OUT), exist_ok=True); doc.save(OUT, deflate=True, garbage=3)
     global ERR

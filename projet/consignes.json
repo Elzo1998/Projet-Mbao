@@ -136,6 +136,15 @@
    "preuve": "MBAO_Terrasse_indiceB_FINAL.pdf ; raccords CONFORME ; verificateur: 1 important (cote 1.26) corrige",
    "source": "client 05/11 (apres indice A)",
    "maj": "2026-11-05 15:05"
+  },
+  {
+   "id": "C-015",
+   "date": "2026-11-05",
+   "texte": "C-015 : terrasse indice C : portes cuisine et toilette = meme taille et meme dessin que la porte existante de l'escalier (0.95) ; douche sans paroi : pente carrelee + siphon au bout ; supprimer la page 2 (donnees techniques) ; pas de 3D",
+   "statut": "fait",
+   "preuve": "MBAO_Terrasse_indiceC_FINAL.pdf, 1 page, raccords CONFORME",
+   "source": "client 05/11",
+   "maj": "2026-11-05 15:47"
   }
  ]
 }
