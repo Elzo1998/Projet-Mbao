@@ -53,3 +53,13 @@ Entreprise × pays (`entreprises/sabtp`, `entreprises/df-engineering`, `pays/sen
 - Travaux en arrière-plan : aucun. Tâches planifiées : aucune.
 
 ## Session 03/11 (suite) : indice F envoyé (îlot) ; 6 vues 3D `projet/vues3d/rendus/MBAO_suite_V1..V6.png` (script `suite_parentale_3d.py`, bpy CPU, 9 min les 3 vues) + `FICHES_VUES_IA.md`. Attente : validation PDF F et avis sur les vues. Hauteur sous plafond 3.00 = hypothèse.
+
+## TERRASSE (C-013, demande client 05/11) : analyse faite, dessin PAS commencé
+Source : `projet/source/PROJET_MBAO_Architecture_V2.pdf`, page index 16 (plan TERRASSE, cartouche D&F, IND. APS, échelle réelle à mesurer : les murs extérieurs mesurent 441.6 pt pour 8.57 m = 51.5 pt/m, PAS 56.693 comme le R+1 ; relever repère et épaisseurs sur le vectoriel, murs = polygones gris 0.75 contour noir).
+Lecture de l'esquisse du client (mètres depuis l'angle extérieur NO ; murs 0.15) :
+- CUISINE existante 5.28 x 4.83 (x 0.15-5.43, y 0.15-4.98) ; son mur est (x 5.43-5.58) s'arrête à y 3.72 : mur NEUF x 5.43-5.58 de y 3.72 à 4.98 pour la fermer ; fenêtre 2.00 x 1.25 dans le mur est, centrée y ~1.75 (0.75-2.75) ; porte 0.90 x 2.20 dans le mur sud (côté ESC), x ~0.30-1.20, ouvrant vers l'intérieur.
+- TOILETTE neuve = 2.85 x 1.26 (x 5.58-8.42, y 3.72-4.98) = 3.59 m2 ; mur sud NEUF y 4.98-5.13 de x 5.58 à 8.42 (prolonge le mur nord de l'ESC) ; fenêtre 1.00 x 0.60 (allège 1.60) dans le mur nord, x ~7.20-8.20 ; porte 0.90 x 2.20 dans le mur sud, côté ouest, hypothèse (le client l'a dessinée près du coin SO) ; WC sous la fenêtre.
+- BAC lessive / vaisselle (encadré bleu) : contre le mur sud de la toilette, côté terrasse, esquisse ~2.10 x 1.10 (x 6.32-8.42), h 0.40 (2 rangs de briques), robinets côté mur de la toilette ; conflit avec la porte (x 5.58-6.48) : décaler le bac à partir de x 6.55 (à confirmer par le client).
+- À refaire : cote « 2.85 » existante (y ~5.9) qui traversera le bac ; surface TERRASSE (92.53) à recalculer sans la toilette ; livrer plan + tableau nom / surface / PÉRIMÈTRE des pièces (cuisine, toilette, ESC, terrasse), cotations exactes, même style (page source).
+- Procédure : RAC-001..011 + `outils/controle_raccords.py` (murs neufs dans le prolongement exact, rendu identique à la source hors zones modifiées), vérificateur avant envoi ; image d'abord si doute.
+Autres points ouverts : avis du client sur les 6 vues 3D ; correction éventuelle des noirs parasites du modèle 3D (10 min) ; prompts : artefact https://claude.ai/artifact/TkqYGLEVn3g3ufqdkwG1fn ; validation du PDF indice F.

@@ -118,6 +118,14 @@
    "preuve": "6 vues rendues (bpy CPU) projet/vues3d/rendus/, fiches IA ; attente avis client",
    "source": "client 03/11",
    "maj": "2026-11-03 19:44"
+  },
+  {
+   "id": "C-013",
+   "date": "2026-11-05",
+   "texte": "C-013 : plan TERRASSE (style D&F/source V2) : cuisine fermee (zone C, 5.28x4.83, fenetre 2.00x1.25) + nouvelle toilette (zone T, fenetre 1.00x0.60) + porte 0.90x2.20 chacune ; bac lessive/vaisselle (zone bleue) h 0.40 (2 rangees de briques), robinets cote mur de la toilette ; refaire le plan, cotations exactes, tableau surface/nom/perimetre des pieces",
+   "statut": "a_faire",
+   "preuve": "",
+   "source": "client 05/11"
   }
  ]
 }
